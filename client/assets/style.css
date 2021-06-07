@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Oswald:wght@600&display=swap');
+
+body {
+    text-decoration: none;
+    margin: 0;
+    background-color: black;
+    background-image: url('https://www.toptal.com/designers/subtlepatterns/patterns/dark-paths.png');
+    background-repeat: repeat;
+    color: rgb(255, 217, 146);
+    font-family: 'Lato', sans-serif;
+}
+
+h1 {
+    font-family: 'Oswald', sans-serif;
+}

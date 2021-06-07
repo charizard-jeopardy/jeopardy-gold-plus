@@ -1,0 +1,59 @@
+{
+  "name": "jeopardy-gold-plus",
+  "version": "1.0.0",
+  "description": "Jeopardy-style game to help prepare for Interviews",
+  "main": "index.js",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack",
+    "start": "cross-env NODE_ENV=production node server/server.js",
+    "test": "jest --verbose",
+    "dev": "concurrently \"cross-env NODE_ENV=development webpack serve\" \"cross-env NODE_ENV=development nodemon server/server.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/charizard-jeopardy/jeopardy-gold-plus.git"
+  },
+  "keywords": [
+    "Jeopardy",
+    "game",
+    "interview-prep",
+    "study"
+  ],
+  "author": "Akiko Dulaney, Joseph Lee, Mike Feldman, Rebecca Schell, Whit Rooke",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/charizard-jeopardy/jeopardy-gold-plus/issues"
+  },
+  "homepage": "https://github.com/charizard-jeopardy/jeopardy-gold-plus#readme",
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-react": "^7.13.13",
+    "@webpack-cli/serve": "^1.4.0",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.2.2",
+    "babel-polyfill": "^6.26.0",
+    "eslint": "^7.17.0",
+    "nodemon": "^2.0.7",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.9.0"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "concurrently": "^6.2.0",
+    "cookie-parser": "^1.4.5",
+    "cross-env": "^7.0.3",
+    "enzyme": "^3.11.0",
+    "express": "^4.17.1",
+    "jest": "^27.0.4",
+    "pg": "^8.6.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hot-loader": "^4.13.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3",
+    "socket.io": "^4.1.2"
+  }
+}
