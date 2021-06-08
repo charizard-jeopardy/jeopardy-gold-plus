@@ -32,7 +32,8 @@ function MainContainer () {
         await setViewState('Game'); 
     }
 
-    const signupFunc = async () => {
+    const signupFunc = async (e) => {
+          e.preventDefault();
           const body = {
           username: username,
           password: password,
@@ -60,20 +61,20 @@ function MainContainer () {
       };
 
     const loginFunc = async (e) => {
-        e.preventDefault(); 
-        const body = {
-        username: username,
-        password: password
-        };
-        console.log("loginFunc MainContainer : ", body);
-        fetch('/login', {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-            credentials: "same-origin",
+          e.preventDefault();
+          const body = {
+          username: username,
+          password: password
+          };
+          console.log(body);
+          fetch('/login', {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+          credentials: "same-origin",
         })
         .then(response => response.json())
         .then(data => {

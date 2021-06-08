@@ -44,7 +44,7 @@ app.post(
   cookie.createCookie,
   (req, res) => {
     //return user_id, displayName, loggedIn: true
-    res.status(200).json("Successfully Signed Up");
+    res.status(200).json(res.locals.userObj);
   }
 );
 
@@ -56,7 +56,7 @@ app.post(
   cookie.createCookie,
   (req, res) => {
     //return user_id, displayName, loggedIn: true
-    res.status(200).json("Successfully Logged In");
+    res.status(200).json(res.locals.userObj);
   }
 );
 
