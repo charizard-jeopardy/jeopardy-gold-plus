@@ -4,6 +4,14 @@ const bcrypt = require("bcryptjs");
 const authController = {};
 
 authController.createUser = async (req, res, next) => {
+  /*
+    {
+        "username": "aki",
+        "email": "aki@aki.com",
+        "password": "meow123",
+        "displayName": "aki"
+    }
+  */
   const { username, password, email, displayName } = req.body;
   const verifyUsernameQuery = {
     text: "SELECT username FROM users WHERE username = ($1)",
@@ -18,11 +26,12 @@ authController.createUser = async (req, res, next) => {
   const salt = bcrypt.genSaltSync(10);
   const hash = bcrypt.hashSync(password, salt);
   const createUserQuery = {
-    text: "INSERT INTO users (username, password, email, displayName) VALUES ($1, $2, $3, $4)",
+    text: "INSERT INTO users (username, password, email, displayName) VALUES ($1, $2, $3, $4) RETURNING user_id",
     values: [username, hash, email, displayName],
     rowMode: "array",
   };
-  await db.query(createUserQuery);
+  const result = await db.query(createUserQuery);
+  res.locals.userId = result.rows[0][0];
   return next();
 };
 ///signup => createUser => assignCookie
