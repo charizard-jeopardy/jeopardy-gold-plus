@@ -61,9 +61,13 @@ app.post(
 );
 
 //** Start Game **//
-app.get("/startGame", (req, res) => {
-  res.status(200).json();
-});
+app.get("/startGame",
+  game.getAllCategories,
+  game.getAllQuestions,
+  game.sortAndPickQuestions,
+  (req, res) => {
+    res.status(200).json('filler');
+  });
 
 //** Add questions to database **//
 app.post("/postQuestion", 
