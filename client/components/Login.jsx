@@ -1,80 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import SignUp from './SignUp.jsx';
 
-function LogIn () {
-    // const { setUsername } = props;
-    // const { setPassword } = props;
-    const [username, setUsername] = useState(''); 
-    const [password, setPassword] = useState(''); 
-
-    const un = (e) => {
-        console.log('onSubmit : ', e.target.value)
-        setUsername(e.target.value);
-    }
-
-    const pw = (e) => {
-        console.log('onSubmit : ', e.target.value)
-        setPassword(e.target.value);
-    }
-
-    const su = (e) => {
-        
-    }
-    
-    const loginFunc = async () => {
-          const body = {
-          username: username,
-          password: password
-          };
-          console.log(body);
-          const data = await fetch('/signup', {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-          credentials: "same-origin",
-        })
-        return data.json()
-        .catch((err) => console.err('error fetching from database :', err));
-      };
-
-    const signupFunc = async () => {
-        const body = {
-            username: username,
-            password: password
-            };
-            console.log(body);
-            const data = await fetch('/signup', {
-            method: "POST",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-            credentials: "same-origin",
-          })
-          return data.json()
-          .catch((err) => console.err('error fetching from database :', err));
-        };
-    }
+function LogIn (props) {
+    const  { loginFunc, signupBtnFunc } = props; 
+    const { un, pw } = props; 
 
     return (
             <div >
                 <h1 >Login Here</h1>
                 <div id="login-field">
                     <form onSubmit={loginFunc}>
-                        <input id="username" placeholder="username" color="primary" onChange={un} ></input>
-                        <input id="password" type="text" placeholder="password" onChange={pw} ></input>
-                        <button id="login-button" type="submit">Sign In</button>
-                        <button id="signup-button" type="submit">Sign Up</button>
+                        <input className="signupField" id="inputField" placeholder="username" onChange={un} ></input>
+                        <input className="signupField" id="inputField" type="text" placeholder="password" onChange={pw} ></input>
+                        <button className="signupField" id="splash-button" type="submit">Sign In</button>
+                        <button className="signupField" id="splash-button" type="button" onClick={signupBtnFunc}>Sign Up</button>
                     </form>
                 </div>
             </div>
     )
 }
-
-
-
 
 export default LogIn;
