@@ -45,6 +45,8 @@
     "webpack-dev-server": "^3.9.0"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/icons": "^4.11.2",
     "body-parser": "^1.19.0",
     "concurrently": "^6.2.0",
     "cookie-parser": "^1.4.5",
