@@ -10,7 +10,7 @@ body {
     font-family: 'Lato', sans-serif;
 }
 
-h1 {
+h1, h2 {
     font-family: 'Oswald', sans-serif;
     text-align: center;
 }
@@ -31,8 +31,8 @@ h1 {
 
 .signupField {
     display: block;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left:auto;
+    margin-right:auto;
     margin-top: 20px;
     margin-bottom: 20px;
 }
@@ -62,4 +62,81 @@ h1 {
 #splash-button:hover {
     background-color: aliceblue;
     color: rgb(253, 117, 68);
+}
+
+#lobby-bar {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color:rgb(255, 217, 146);
+    color:rgb(0, 38, 88);
+}
+
+#lobby-players {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#lobby-scores {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#lobby-el {
+    display: flex;
+    margin: auto;
+}
+
+#game-container {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.topics {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.topic-square {
+    display:inline-block;
+    border: 1px solid rgb(255, 217, 146);
+    border-radius: 3px;
+    background-color: transparent;
+    margin: 20px;
+    padding: 5px;
+    width: 110px;
+    text-align: center;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.q-square {
+    border: 1px solid rgb(255, 217, 146);
+    border-radius: 3px;
+    background-color: transparent;
+    margin: 20px;
+    padding: 5px;
+    width: 110px;
+    height: 70px;
+    text-align: center;
+}
+
+.q-square:active {
+    background-color:rgb(253, 117, 68);
+    color:rgb(0, 38, 88);
+}
+
+.q-square:hover {
+    background-color: rgb(255, 217, 146);
+    color: rgb(0, 38, 88);
 }
