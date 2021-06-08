@@ -17,6 +17,7 @@ const app = express();
 
 //** Serve all compiled files when running the production build **//
 app.use(express.static(path.resolve(__dirname, "./../client")));
+app.use('/build', express.static(path.join(__dirname, '../build')));
 app.use(cookieparser());
 // app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.json());
