@@ -20,10 +20,10 @@ module.exports = {
       await client.query('ROLLBACK');
       console.error(e);
     } finally {
-      console.log('Database connection disconnected')
+      console.log('Database connection disconnected');
       client.release();
     }
     return res;
   }
-}
+};
 
