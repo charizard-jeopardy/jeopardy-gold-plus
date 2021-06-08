@@ -7,6 +7,7 @@ const game = require("./controller/gameController.js");
 const highScore = require("./controller/highScoreController.js");
 const model = require("./models/jeopardyModel.js");
 const session = require("./controller/sessionController.js");
+const cookie = require("./controller/cookieController.js");
 
 //** Port Set Up **//
 const PORT = 3000;
@@ -26,15 +27,36 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "./../client/index.html"));
 });
 
+app.get(
+  "/checkSession",
+  session.verifySession,
+  (req, res) => {
+    const { displayName } = res.locals;
+    res.status(200).json({validSession: true, displayName: displayName})
+  }
+)
+
 //** Sign Up *//
-app.post("/signup", auth.createUser, session.createSession, (req, res) => {
-  res.status(200).json("Successfully Signed Up");
-});
+app.post(
+  "/signup",
+  auth.createUser,
+  session.createSession,
+  cookie.createCookie,
+  (req, res) => {
+    res.status(200).json("Successfully Signed Up");
+  }
+);
 
 //** Login **//
-app.post("/login", auth.verifyUser, session.createSession, (req, res) => {
-  res.status(200).json("Successfully Logged In");
-});
+app.post(
+  "/login",
+  auth.verifyUser,
+  session.createSession,
+  cookie.createCookie,
+  (req, res) => {
+    res.status(200).json("Successfully Logged In");
+  }
+);
 
 //** Start Game **//
 app.get("/startGame", (req, res) => {
