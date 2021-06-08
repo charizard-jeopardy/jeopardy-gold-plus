@@ -28,7 +28,8 @@ function MainContainer () {
         setViewState('signup'); 
     }
 
-    const signupFunc = async () => {
+    const signupFunc = async (e) => {
+          e.preventDefault();
           const body = {
           username: username,
           password: password,
@@ -55,7 +56,8 @@ function MainContainer () {
         .catch((err) => console.err('error fetching from database :', err));
       };
 
-    const loginFunc = async () => {
+    const loginFunc = async (e) => {
+          e.preventDefault();
           const body = {
           username: username,
           password: password

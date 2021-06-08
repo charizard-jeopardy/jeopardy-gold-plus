@@ -26,11 +26,18 @@ authController.createUser = async (req, res, next) => {
   const salt = bcrypt.genSaltSync(10);
   const hash = bcrypt.hashSync(password, salt);
   const createUserQuery = {
-    text: "INSERT INTO users (username, password, email, displayName) VALUES ($1, $2, $3, $4) RETURNING user_id",
+    text: "INSERT INTO users (username, password, email, displayName) VALUES ($1, $2, $3, $4) RETURNING user_id, username, displayName",
     values: [username, hash, email, displayName],
     rowMode: "array",
   };
   const result = await db.query(createUserQuery);
+  const userObj = {
+    user_id: result.rows[0][0],
+    username: result.rows[0][1],
+    displayName: result.rows[0][2],
+    loggedIn: true
+  }
+  res.locals.userObj = userObj;
   res.locals.userId = result.rows[0][0];
   return next();
 };
@@ -43,7 +50,7 @@ authController.verifyUser = async (req, res, next) => {
   //expecting req.body to have username and password
   const { username, password } = req.body;
   const verifyUsernameQuery = {
-    text: "SELECT password, user_id FROM users WHERE username = ($1)",
+    text: "SELECT password, user_id, username, displayName FROM users WHERE username = ($1)",
     values: [username],
     rowMode: "array",
   };
@@ -53,7 +60,15 @@ authController.verifyUser = async (req, res, next) => {
   bcrypt.compare(password, verifyResults.rows[0][0], (err, match) => {
     if (err) console.log("Error in bcrypt compare: ", err);
     if (!match) return res.status(200).json("Incorrect password");
+    console.log(verifyResults.rows[0]);
+    const userObj = {
+      user_id: verifyResults.rows[0][1],
+      username: verifyResults.rows[0][2],
+      displayName: verifyResults.rows[0][3],
+      loggedIn: true
+    }
     res.locals.userId = verifyResults.rows[0][1];
+    res.locals.userObj = userObj;
     return next();
   });
 };
