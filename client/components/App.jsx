@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
-import MainContainer from './MainContainer.jsx'
+import MainContainer from '../container/MainContainer.jsx'
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
-class App extends Component {
-    constructor(props) {
-        super(props)
-    }
+import blue from '@material-ui/core/colors/blue';
+import yellow from '@material-ui/core/colors/yellow';
 
-    render() {
-        return (
-            <div>
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: blue[500],
+    },
+    secondary: {
+      main: yellow[500],
+    },
+  },
+});
+
+function App () {
+    return (
+        <div> 
+            <ThemeProvider theme={theme}>
                 <MainContainer />
-            </div>
-        );
-    }
+            </ThemeProvider> 
+        </div>
+    )
 }
+
+
 
 
 export default App;
