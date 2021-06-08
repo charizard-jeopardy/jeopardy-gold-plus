@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainContainer from '../container/MainContainer.jsx'
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -16,7 +16,10 @@ const theme = createMuiTheme({
   },
 });
 
+
 function App () {
+
+
     return (
         <div> 
             <ThemeProvider theme={theme}>
