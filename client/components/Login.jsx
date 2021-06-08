@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import React, { useState, useEffect } from 'react';
+import SignUp from './SignUp.jsx';
 
-function LogIn () {
+function LogIn (props) {
+    const  { loginFunc, signupBtnFunc } = props; 
+    const { un, pw } = props; 
+
     return (
             <div >
                 <h1 >Login Here</h1>
                 <div id="login-field">
-                    <div className="login">
-                        <TextField id="outlined-basic" variant="outlined" placeholder="username" color="primary"></TextField>
-                    </div>
-                    <div className="login">
-                        <TextField id="outlined-basic" variant="outlined" placeholder="password" type="password" color="primary"></TextField>
-                    </div>
-                    <div>
-                        <Button id="login-button" color="primary" >Submit</Button>
-                    </div>
+                    <form onSubmit={loginFunc}>
+                        <input className="signupField" id="inputField" placeholder="username" onChange={un} ></input>
+                        <input className="signupField" id="inputField" type="text" placeholder="password" onChange={pw} ></input>
+                        <button className="signupField" id="splash-button" type="submit">Sign In</button>
+                        <button className="signupField" id="splash-button" type="button" onClick={signupBtnFunc}>Sign Up</button>
+                    </form>
                 </div>
             </div>
     )
