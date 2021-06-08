@@ -12,4 +12,25 @@ body {
 
 h1 {
     font-family: 'Oswald', sans-serif;
+    text-align: center;
+}
+
+#login-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(218, 238, 255, 0.445);
+}
+
+.login {
+    margin: 5px;
+    /* padding: 5px; */
+    border-color:rgb(255, 217, 146); 
+}
+
+#login-button {
+    text-align: center;
+    border: 1px solid;
+    margin: 5px;
 }
