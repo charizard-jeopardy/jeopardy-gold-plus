@@ -43,6 +43,7 @@ app.post(
   session.createSession,
   cookie.createCookie,
   (req, res) => {
+    //return user_id, displayName, loggedIn: true
     res.status(200).json("Successfully Signed Up");
   }
 );
@@ -54,6 +55,7 @@ app.post(
   session.createSession,
   cookie.createCookie,
   (req, res) => {
+    //return user_id, displayName, loggedIn: true
     res.status(200).json("Successfully Logged In");
   }
 );
@@ -62,6 +64,14 @@ app.post(
 app.get("/startGame", (req, res) => {
   res.status(200).json();
 });
+
+//** Add questions to database **//
+app.post("/postQuestion", 
+  game.addQuestion,
+  (req, res) => {
+  res.status(200).json('question added to database!');
+})
+
 
 //** Update High Score **//
 app.post("updateHighScore", (req, res) => {

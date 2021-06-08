@@ -20,17 +20,46 @@ h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(218, 238, 255, 0.445);
 }
 
-.login {
-    margin: 5px;
-    /* padding: 5px; */
-    border-color:rgb(255, 217, 146); 
+#signup-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
-#login-button {
-    text-align: center;
-    border: 1px solid;
-    margin: 5px;
+.signupField {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#inputField {
+    padding: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 5px;
+    background-color: transparent;
+    color:rgb(255, 217, 146);
+    width: 300px;
+}
+
+#splash-button {
+    padding: 10px;
+    border: 1px solid aliceblue;
+    border-radius: 5px;
+    background-color: transparent;
+    color:rgb(255, 217, 146);
+}
+
+#splash-button:active {
+    background-color: rgb(253, 117, 68);
+    color: rgb(0, 38, 88);
+}
+
+#splash-button:hover {
+    background-color: aliceblue;
+    color: rgb(253, 117, 68);
 }
