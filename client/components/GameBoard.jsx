@@ -16,10 +16,13 @@ function GameBoard({ displayName }){
     const [divClass, setDivClass] = useState('answer-text'); 
     const [response, setResponse] = useState(''); 
     const [disabled, setDisable] = useState(false);
+    const [btnclass, setbtnClass] = useState('q-square');
     const [winner, setWinner] = useState('');
     const [score, setScore] = useState('');
-
+    const [questionsObject, setquestionObject] = useState({})
     const [renderGame, setRenderGame] = useState(false); 
+    const [previouslyCalledQuestions, setpreviouslyCalledQuestions] = useState([]);
+    const [previouslyUsedButton, setpreviouslyUsedButton] = useState([]);
 
     const renderAnswer = (className) => {
         setDivClass(className); 
@@ -27,46 +30,81 @@ function GameBoard({ displayName }){
     }
     
     const handleClick = (sid, nid) => {
-        setView('q&a');
-        gameFunc(sid, nid); 
+        // setView('q&a');
+        // console.log('id: ', id);
+        const prevQ = `${sid}${nid}`;
+        console.log('precQ: ', prevQ);
+        
+        if (!previouslyCalledQuestions.includes(prevQ)) getCurrentQuestion(sid, nid, questionsObject, prevQ);         
         setDisable(true);
+        
     }
 
     const returnToBoard = (e) => {
         e.preventDefault();
         setView('Game')
     }
+
+    //given an sid and a nid thats how we're identifying the question
+    //create a state called previouslyCalledQuestions intially equal to an empty object
+    //when in getCurrentQuestion we will grab the sid and nid
+      //set it as a key:value pair in previouslyCalledQuestions
+    
+    //before we call getCurrentQuestion 
+      //checkout if previouslyCalledQuestions contains a key:value pair of the passed in sid and nid
+      // if true set disabled to true
+    const getCurrentQuestion = (sid, nid, questionsObject, prevQ) => {
+      console.log('in the get currentquestion func')
+      console.log(prevQ)
+      previouslyCalledQuestions.push(prevQ)
+      setpreviouslyCalledQuestions(previouslyCalledQuestions);
+      previouslyUsedButton.push(prevQ);
+      setpreviouslyUsedButton(previouslyUsedButton);
+      console.log(previouslyUsedButton)
+      console.log('previouslyCalledQuestions')
+      console.log(previouslyCalledQuestions)
+      for (const topicObj in questionsObject){
+        if (sid === topicObj) {
+          for (const numObj in questionsObject[topicObj]){
+              if (nid == numObj) {
+                  setQuestion(questionsObject[topicObj][numObj].question); 
+                  setAnswer1(questionsObject[topicObj][numObj].answer1); 
+                  setAnswer2(questionsObject[topicObj][numObj].answer2); 
+                  setAnswer3(questionsObject[topicObj][numObj].answer3); 
+                  setAnswer4(questionsObject[topicObj][numObj].answer4); 
+                  setCorrectAnswer(questionsObject[topicObj][numObj].correctAnswer); 
+                  setView('q&a');
+              }
+            }
+          }
+        }
+      }
+    //call gameFunc on intial render of component
+    //change gameFunc state to true so we dont rerender
+    //after calling fetch request store the object in game questions object in state
+    
+    //on click of button
+    //set q&a state
+    //look through the gameQuestions object in state and match with the one from the nid
+    //store those in the existing question and answer states
     
     const gameFunc = async (sid, nid) => {
-        // id.preventDefault();
-        await fetch('/startGame')
-        .then(response => response.json())
-        .then(async data => {
-            // setRenderGame(true); 
-            console.log('data in gameFunc', data)
-            for (const topicObj in data){
-                if (sid === topicObj) {
-                    for (const numObj in data[topicObj]){
-                        if (nid == numObj) {
-                            await setQuestion(data[topicObj][numObj].question); 
-                            await setAnswer1(data[topicObj][numObj].answer1); 
-                            await setAnswer2(data[topicObj][numObj].answer2); 
-                            await setAnswer3(data[topicObj][numObj].answer3); 
-                            await setAnswer4(data[topicObj][numObj].answer4); 
-                            await setCorrectAnswer(data[topicObj][numObj].correctAnswer); 
-                            await setView('q&a');
-                }
-            }
-        }
-        }
+      // id.preventDefault();
+      console.log('test!!!!!!!!!!!!!!!');
+      await fetch('/startGame')
+      .then(response => response.json())
+      .then(data => {
+        setquestionObject(data);
+        // setView('q&a');
+        setRenderGame(true); 
+          // console.log('data in gameFunc', data)            
       })
       .catch((err) => console.error('gameBoard.jsx error fetching from database :', err));
     };
 
-    // if (renderGame === false) {
-        
-    //     gameFunc(); 
-    // }
+    if (renderGame === false) {        
+      gameFunc(); 
+    }
 
     let topic = ['frontend', 'backend', 'systemDesign', 'databases', 'javascript', 'gentrivia'];
     let topicArr = [];
@@ -75,13 +113,28 @@ function GameBoard({ displayName }){
     }); 
 
     let boardArr = [];
+    let checkId;
     const money = [200, 400, 600, 800, 1000]; 
     for (let i = 0; i < topic.length; i++) {
         let qArr = [];
         let stringId = topic[i]; 
+        checkId = `${stringId}`
         money.forEach(el => {
+          checkId += el;
+          // console.log('previouslyUsedButton')
+          // console.log(previouslyUsedButton)
+          if (!previouslyUsedButton.includes(checkId)) {
+            
+            // console.log(checkId)
             let numId = el; 
-           qArr.push(<Square diasbled={disabled} stringId={stringId} numId={numId} id={topic[i] + el} className="q-square" key={el} value={el}  handleClick={handleClick}></Square>)
+            qArr.push(<Square stringId={stringId} numId={numId} id={topic[i] + el} className={btnclass} key={el} value={el}  handleClick={handleClick}></Square>)
+            checkId = `${stringId}`
+          }
+          else {
+            let numId = el; 
+            qArr.push(<Square stringId={stringId} numId={numId} id={topic[i] + el} className="q-ClickedButtons" key={el} value={'XX'}  handleClick={handleClick}></Square>)
+            checkId = `${stringId}`
+          }
         });
         boardArr.push(<div id={topic[i]} className="column">{qArr}</div>);
     }

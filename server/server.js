@@ -15,7 +15,7 @@ const PORT = 3000;
 //** initialize express server **//
 const app = express();
 const httpServer = require("http").createServer(app);
-const io = require("socket.io")(httpServer);
+// const io = require("socket.io")(httpServer);
 
 //** Serve all compiled files when running the production build **//
 app.use(express.static(path.resolve(__dirname, "./../client")));
