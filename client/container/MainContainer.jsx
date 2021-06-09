@@ -4,7 +4,13 @@ import LogIn from '../components/Login.jsx'
 import SignUp from '../components/SignUp.jsx'
 import Lobby from '../components/Lobby.jsx'
 import GameBoard from "../components/GameBoard.jsx";
+import { io } from 'socket.io-client';
 
+let socket;
+if (process.env.NODE_ENV === 'development') socket = io();
+else socket = io('http://54.80.185.106/');
+
+// socket.emit("hello", "world");
 
 function MainContainer () {
     const [viewState, setViewState] = useState('');
@@ -44,6 +50,7 @@ function MainContainer () {
     }
     const renderGame = async () => {
         await setViewState('Game'); 
+
     }
 
     const signupFunc = async (e) => {
@@ -113,7 +120,7 @@ function MainContainer () {
     else if (viewState === 'Game') return (
         <div>
             <div><Lobby /></div>
-            <div id="game-container"><GameBoard displayName={displayName}/></div>
+            <div id="game-container"><GameBoard displayName={displayName} socket = {socket}/></div>
         </div>
     )
 }
