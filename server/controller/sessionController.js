@@ -51,6 +51,7 @@ sessionController.verifySession = async (req, res, next) => {
     displayName: sessionVar.rows[0][2],
     loggedIn: true
   }
+  console.log(userObj);
   res.locals.userObj = userObj;
   return next();
 };
