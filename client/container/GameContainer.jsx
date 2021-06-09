@@ -1,9 +1,10 @@
 import React from 'react';
+import GameBoard from "../components/GameBoard.jsx";
 
 function GameContainer()  {
     return(
         <div id="game-container">
-            <p>Game Container</p>
+            <GameBoard />
         </div>
     )
 }

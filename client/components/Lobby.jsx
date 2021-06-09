@@ -2,18 +2,18 @@ import React from 'react';
 
 function Lobby() {
     return(
-        <div>
+        <div id="lobby-bar">
             <div id="lobby-players">
-                <p>Player 1</p>
-                <p>Player 2</p>
-                <p>Player 3</p>
-                <p>Player 4</p>
+                <h3 className="lobby-el">Player 1</h3>
+                <h3 className="lobby-el">Player 2</h3>
+                <h3 className="lobby-el">Player 3</h3>
+                <h3 className="lobby-el">Player 4</h3>
             </div>
-            <div id="lobby-scores">
-                <p>1000</p>
-                <p>1000</p>
-                <p>1000</p>
-                <p>1000</p>
+            <div id="lobby-scores">                
+                <h3 className="lobby-el">1000</h3>
+                <h3 className="lobby-el">1000</h3>
+                <h3 className="lobby-el">1000</h3>
+                <h3 className="lobby-el">1000</h3>
             </div>
         </div>
     )
