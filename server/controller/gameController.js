@@ -144,8 +144,8 @@ gameController.getAllQuestions = async (req, res, next) => {
     rowMode: "array",
   };
   const getDatabaseQuestions = {
-    text: `SELECT f.dollarAmount, q.question
-        FROM database d 
+    text: `SELECT d.dollarAmount, q.question
+        FROM databases d 
         INNER JOIN questions q
         ON d.database_id = q.category_id`,
     rowMode: "array",
@@ -154,18 +154,18 @@ gameController.getAllQuestions = async (req, res, next) => {
     text: `SELECT s.dollarAmount, q.question
         FROM systemdesign s 
         INNER JOIN questions q
-        ON s.systemdesign = q.category_id`,
+        ON s.systemdesign_id = q.category_id`,
     rowMode: "array",
   };
   const getGenTriviaQuestions = {
     text: `SELECT g.dollarAmount, q.question
-        FROM genTrivia g 
+        FROM gentrivia g 
         INNER JOIN questions q
-        ON g.genTrivia_id = q.category_id`,
+        ON g.gentrivia_id = q.category_id`,
     rowMode: "array",
   };
   const getJavascriptQuestions = {
-    text: `SELECT f.dollarAmount, q.question
+    text: `SELECT j.dollarAmount, q.question
         FROM javascript j 
         INNER JOIN questions q
         ON j.javascript_id = q.category_id`,
@@ -177,7 +177,6 @@ gameController.getAllQuestions = async (req, res, next) => {
   const systemDesignResult = await db.query(getSystemDeisgnQuestions);
   const genTriviaResult = await db.query(getGenTriviaQuestions);
   const javascriptResult = await db.query(getJavascriptQuestions);
-  // console.log(frontendResult.rows);
   let frontendObject = {};
   const frontendArray = [];
   frontendResult.rows.forEach((el) => {
@@ -186,38 +185,52 @@ gameController.getAllQuestions = async (req, res, next) => {
     frontendArray.push(frontendObject);
     frontendObject = {};
   });
-  // const backendObject = {};
-  // backendResult.rows.forEach((el, index) => {
-  //   backendObject[`dollarAmount:${index}`] = el[0];
-  //   backendObject[`question:${index}`] = el[1];
-  // });
-  // const databaseObject = {};
-  // databaseResult.rows.forEach((el, index) => {
-  //   databaseObject[`dollarAmount:${index}`] = el[0];
-  //   databaseObject[`question:${index}`] = el[1];
-  // });
-  // const systemDesignObject = {};
-  // systemDesignResult.rows.forEach((el, index) => {
-  //   systemDesignObject[`dollarAmount:${index}`] = el[0];
-  //   systemDesignObject[`question:${index}`] = el[1];
-  // });
-  // const javascriptObject = {};
-  // javascriptResult.rows.forEach((el, index) => {
-  //   javascriptObject[`dollarAmount:${index}`] = el[0];
-  //   javascriptObject[`question:${index}`] = el[1];
-  // });
-  // const genTriviaObject = {};
-  // genTriviaResult.rows.forEach((el, index) => {
-  //   genTriviaObject[`dollarAmount:${index}`] = el[0];
-  //   genTriviaObject[`question:${index}`] = el[1];
-  // });
+  let backendObject = {};
+  const backendArray = [];
+  backendResult.rows.forEach((el, index) => {
+    backendObject[`dollarAmount`] = el[0];
+    backendObject[`question`] = el[1];
+    backendArray.push(backendObject);
+    backendObject = {};
+  });
+  let databaseObject = {};
+  const databaseArray = [];
+  databaseResult.rows.forEach((el, index) => {
+    databaseObject[`dollarAmount`] = el[0];
+    databaseObject[`question`] = el[1];
+    databaseArray.push(databaseObject);
+    databaseObject = {};
+  });
+  let systemDesignObject = {};
+  const systemDesignArray = [];
+  systemDesignResult.rows.forEach((el, index) => {
+    systemDesignObject[`dollarAmount`] = el[0];
+    systemDesignObject[`question`] = el[1];
+    systemDesignArray.push(systemDesignObject);
+    systemDesignObject = {};
+  });
+  let javascriptObject = {};
+  const javascriptArray = [];
+  javascriptResult.rows.forEach((el, index) => {
+    javascriptObject[`dollarAmount`] = el[0];
+    javascriptObject[`question`] = el[1];
+    javascriptArray.push(javascriptObject);
+    javascriptObject = {};
+  });
+  let genTriviaObject = {};
+  const genTriviaArray = [];
+  genTriviaResult.rows.forEach((el, index) => {
+    genTriviaObject[`dollarAmount`] = el[0];
+    genTriviaObject[`question`] = el[1];
+    genTriviaArray.push(genTriviaObject);
+    genTriviaObject = {};
+  });
   res.locals.frontendArray = frontendArray;
-  //   res.locals.backendObject = backendObject;
-  //   res.locals.systemDesignObject = systemDesignObject;
-  //   res.locals.javascriptObject = javascriptObject;
-  //   res.locals.databasesObject = databaseObject;
-  //   res.locals.genTriviaObject = genTriviaObject;
-  // console.log(res.locals.frontendArray);
+  res.locals.backendArray = backendArray;
+  res.locals.systemDesignArray = systemDesignArray;
+  res.locals.javascriptArray = javascriptArray;
+  res.locals.databaseArray = databaseArray;
+  res.locals.genTriviaArray = genTriviaArray;
   return next();
 };
 
@@ -234,12 +247,9 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
     gameObject,
   } = res.locals;
   allQuestionsArray.push(frontendArray);
-  let twoHundred = [];
-  let fourHundred = [];
-  let sixHundred = [];
-  let eightHundred = [];
-  let oneThousand = [];
-  //   allQuestionsArray.push()
+
+
+  let twoHundred = [], fourHundred = [], sixHundred = [], eightHundred = [], oneThousand = [];
   
   const topic = [
     "frontend",
@@ -247,15 +257,12 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
     "databases",
     "javascript",
     "systemDesign",
-    "genTrivia",
+    "gentrivia",
   ];
-  // console.log("two hundred array");
-  // console.log(twoHundred);
   const dollars = [200, 400, 600, 800, 1000];
   for (let i = 0; i < topic.length; i += 1) {
     if (topic[i] === 'frontend') {
       frontendArray.forEach((el) => {
-        console.log("in the foreach!!!!");
         if (el["dollarAmount"] === 200) twoHundred.push(el);
         if (el["dollarAmount"] === 400) fourHundred.push(el);
         if (el["dollarAmount"] === 600) sixHundred.push(el);
@@ -264,8 +271,9 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
       });
     }
     if (topic[i] === 'backend') {
+      console.log('backend array')
+      console.log(backendArray)
       backendArray.forEach((el) => {
-        console.log("in the foreach!!!!");
         if (el["dollarAmount"] === 200) twoHundred.push(el);
         if (el["dollarAmount"] === 400) fourHundred.push(el);
         if (el["dollarAmount"] === 600) sixHundred.push(el);
@@ -273,9 +281,9 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
         if (el["dollarAmount"] === 1000) oneThousand.push(el);
       });
     }
-    if (topic[i] === 'database') {
+    if (topic[i] === 'databases') {
+      console.log(`AHHHHHHHHHHHH!!!! ${databaseArray}`);
         databaseArray.forEach((el) => {
-          console.log("in the foreach!!!!");
           if (el["dollarAmount"] === 200) twoHundred.push(el);
           if (el["dollarAmount"] === 400) fourHundred.push(el);
           if (el["dollarAmount"] === 600) sixHundred.push(el);
@@ -283,9 +291,8 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
           if (el["dollarAmount"] === 1000) oneThousand.push(el);
         });
       }
-    if (topic[i] === 'systemdesign') {
-      systemdesign.forEach((el) => {
-        console.log("in the foreach!!!!");
+    if (topic[i] === 'systemDesign') {
+      systemDesignArray.forEach((el) => {
         if (el["dollarAmount"] === 200) twoHundred.push(el);
         if (el["dollarAmount"] === 400) fourHundred.push(el);
         if (el["dollarAmount"] === 600) sixHundred.push(el);
@@ -295,7 +302,6 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
     }
     if (topic[i] === 'javascript') {
         javascriptArray.forEach((el) => {
-          console.log("in the foreach!!!!");
           if (el["dollarAmount"] === 200) twoHundred.push(el);
           if (el["dollarAmount"] === 400) fourHundred.push(el);
           if (el["dollarAmount"] === 600) sixHundred.push(el);
@@ -303,9 +309,8 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
           if (el["dollarAmount"] === 1000) oneThousand.push(el);
         });
       }
-      if (topic[i] === 'genTrivia') {
+      if (topic[i] === 'gentrivia') {
         genTriviaArray.forEach((el) => {
-          console.log("in the foreach!!!!");
           if (el["dollarAmount"] === 200) twoHundred.push(el);
           if (el["dollarAmount"] === 400) fourHundred.push(el);
           if (el["dollarAmount"] === 600) sixHundred.push(el);
@@ -316,31 +321,36 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
     gameObject[topic[i]] = {};
     for (let j = 0; j < dollars.length; j += 1) {
       if (dollars[j] === 200) {
-        console.log("in the nested for loops!!!!!");
         let random = Math.floor(Math.random() * twoHundred.length);
-        console.log("after random!!!");
         let gameQuestion = twoHundred[random];
-        gameObject[topic[i]][200] = gameQuestion;
+        if (!gameQuestion) gameObject[topic[i]][200] = gameQuestion
+        else gameObject[topic[i]][200] = gameQuestion.question;
       }
       if (dollars[j] === 400) {
         let random = Math.floor(Math.random() * fourHundred.length);
         let gameQuestion = fourHundred[random];
-        gameObject[topic[i]][400] = gameQuestion;
+        console.log('gameQuestion:400')
+        console.log(gameQuestion)
+        if (!gameQuestion) gameObject[topic[i]][400] = gameQuestion
+        else gameObject[topic[i]][400] = gameQuestion.question;
       }
       if (dollars[j] === 600) {
         let random = Math.floor(Math.random() * sixHundred.length);
         let gameQuestion = sixHundred[random];
-        gameObject[topic[i]][600] = gameQuestion;
+        if (!gameQuestion) gameObject[topic[i]][600] = gameQuestion
+        else gameObject[topic[i]][600] = gameQuestion.question;
       }
       if (dollars[j] === 800) {
         let random = Math.floor(Math.random() * eightHundred.length);
         let gameQuestion = eightHundred[random];
-        gameObject[topic[i]][800] = gameQuestion;
+        if (!gameQuestion) gameObject[topic[i]][800] = gameQuestion
+        else gameObject[topic[i]][800] = gameQuestion.question;
       }
       if (dollars[j] === 1000) {
         let random = Math.floor(Math.random() * oneThousand.length);
         let gameQuestion = oneThousand[random];
-        gameObject[topic[i]][1000] = gameQuestion;
+        if (!gameQuestion) gameObject[topic[i]][1000] = gameQuestion
+        else gameObject[topic[i]][1000] = gameQuestion.question;
       }
     }
     twoHundred = [];
@@ -349,8 +359,8 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
     eightHundred = [];
     oneThousand = [];
 }
-  console.log(gameObject);
-  return next();
+res.locals.gameObject = gameObject;
+return next();
 };
 
 //   const questionsArray = [];
