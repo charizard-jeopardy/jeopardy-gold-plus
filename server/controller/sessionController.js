@@ -29,10 +29,10 @@ sessionController.createSession = async (req, res, next) => {
 };
 
 sessionController.verifySession = async (req, res, next) => {
-  if (!req.cookies.ssid) return res.status(200).json({validSession: false})
+  if (!req.cookies.ssid) return res.status(200).json({loggedIn: false})
   const { ssid } = req.cookies;
   const verifySessionQuery = {
-    text: `SELECT displayName FROM users u
+    text: `SELECT u.user_id, username, displayName FROM users u
     INNER JOIN sessions s
     ON u.user_id = s.user_id 
     WHERE s.ssid = ($1)`,
@@ -40,10 +40,18 @@ sessionController.verifySession = async (req, res, next) => {
     rowMode: "array"
   }
   const sessionVar = await db.query(verifySessionQuery)
+  console.log(sessionVar);
   if (!sessionVar.rows[0]){
-    return res.status(200).json({validSession: false});
+    return res.status(200).json({loggedIn: false});
   } 
-  res.locals.displayName = sessionVar.rows[0][0]; 
+  console.log(sessionVar.rows[0]);
+  const userObj = {
+    user_id: sessionVar.rows[0][0],
+    username: sessionVar.rows[0][1],
+    displayName: sessionVar.rows[0][2],
+    loggedIn: true
+  }
+  res.locals.userObj = userObj;
   return next();
 };
 
