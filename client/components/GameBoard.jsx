@@ -12,9 +12,7 @@ function GameBoard({ displayName }){
     const [answer2, setAnswer2] = useState(''); 
     const [answer3, setAnswer3] = useState(''); 
     const [answer4, setAnswer4] = useState(''); 
-    const [correctAnswer, setCorrectAnswer] = useState('');
-    
-    
+    const [correctAnswer, setCorrectAnswer] = useState(''); 
     const [disabled, setDisable] = useState(false);
     const [btnclass, setbtnClass] = useState('q-square');
     const [winner, setWinner] = useState('');
@@ -37,8 +35,7 @@ function GameBoard({ displayName }){
         
     }
 
-    const returnToBoard = (e) => {
-        e.preventDefault();
+    const returnToBoard = () => {
         setView('Game')
     }
 
@@ -139,7 +136,7 @@ function GameBoard({ displayName }){
         return (
             <div>
                 <div className="questionAnswer">
-                    <Questions q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} returnBoar={returnToBoard} />
+                    <Questions q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} returnBoard={returnToBoard} />
                 </div>
                 <div>
                     <button id="return-to-board" onClick={returnToBoard}>Return to Board</button>
