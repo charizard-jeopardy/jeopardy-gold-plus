@@ -9,11 +9,15 @@ const model = require("./models/jeopardyModel.js");
 const session = require("./controller/sessionController.js");
 const cookie = require("./controller/cookieController.js");
 
+
 //** Port Set Up **//
 const PORT = 3000;
 
 //** initialize express server **//
 const app = express();
+const httpServer = require("http").createServer(app);
+const io = require("socket.io")(httpServer);
+
 
 //** Serve all compiled files when running the production build **//
 app.use(express.static(path.resolve(__dirname, "./../client")));
@@ -60,6 +64,15 @@ app.post(
   }
 );
 
+//** Connecting to Sockets**//
+io.on("connection", socket => {
+  console.log('looking at socket')
+  // console.log(socket);
+  socket.on("hello", (arg) =>{
+    console.log(arg);
+  })
+})
+
 //** Start Game **//
 app.get("/startGame",
   game.getAllCategories,
@@ -103,7 +116,7 @@ app.use((err, req, res, next) => {
 });
 
 //** App Listener  **//
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   if (process.env.DEMO_MODE)
     console.log("~~~ D E M O   M O D E   A C T I V A T E D ~~~");
   console.log(`Charizard used flamethrower on ${PORT} 🔥`);
