@@ -101,7 +101,7 @@ gameController.addQuestion = async (req, res, next) => {
     answer4: answer4,
     correctAnswer: correctAnswer,
   };
-  console.log(questionObj);
+  console.log("BackEnd: questionObj", questionObj);
   const questionQuery = {
     text: `INSERT INTO questions (category_id, question) VALUES ($1, $2)`,
     values: [categoryId, questionObj],
@@ -271,8 +271,6 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
       });
     }
     if (topic[i] === 'backend') {
-      console.log('backend array')
-      console.log(backendArray)
       backendArray.forEach((el) => {
         if (el["dollarAmount"] === 200) twoHundred.push(el);
         if (el["dollarAmount"] === 400) fourHundred.push(el);
@@ -282,7 +280,6 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
       });
     }
     if (topic[i] === 'databases') {
-      console.log(`AHHHHHHHHHHHH!!!! ${databaseArray}`);
         databaseArray.forEach((el) => {
           if (el["dollarAmount"] === 200) twoHundred.push(el);
           if (el["dollarAmount"] === 400) fourHundred.push(el);
@@ -329,8 +326,6 @@ gameController.sortAndPickQuestions = async (req, res, next) => {
       if (dollars[j] === 400) {
         let random = Math.floor(Math.random() * fourHundred.length);
         let gameQuestion = fourHundred[random];
-        console.log('gameQuestion:400')
-        console.log(gameQuestion)
         if (!gameQuestion) gameObject[topic[i]][400] = gameQuestion
         else gameObject[topic[i]][400] = gameQuestion.question;
       }

@@ -1,13 +1,16 @@
 import React from 'react';
 
-function Questions() {
+function Questions({ q, a1, a2, a3, a4, ca}) {
     return (
         <div>
             <div className="question-field">
-                <p>This is a question-field</p>
+                <div>Question : {q}</div>
             </div>
             <div className="answer-field">
-                <p>This is an answer-field</p> 
+                <div>Answer 1 : {a1}</div>
+                <div>Answer 2 : {a2}</div>
+                <div>Answer 3 : {a3}</div>
+                <div>Answer 4 : {a4}</div>
             </div>
         </div>
     )

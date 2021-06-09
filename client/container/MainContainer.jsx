@@ -15,7 +15,6 @@ function MainContainer () {
       })
         .then((response) => response.json())
         .then((json) => {
-          console.log('Gotcha');
           const session = json.loggedIn;
           if (session===true) setViewState('Game');
           setDisplayName(json.displayName);
@@ -38,7 +37,7 @@ function MainContainer () {
         setEmail(e.target.value);
     }
     const nn = (e) => {
-        setDisplayName(e);
+        setDisplayName(e.target.value);
     }
     const signupBtnFunc = async () => {
         await setViewState('signup'); 
@@ -56,7 +55,6 @@ function MainContainer () {
           displayName: displayName,
           highScore: 0
           };
-          nn(displayName); 
           fetch('/signup', {
           method: "POST",
           headers: {
@@ -80,7 +78,6 @@ function MainContainer () {
           username: username,
           password: password
           };
-          console.log(body);
           fetch('/login', {
           method: "POST",
           headers: {
@@ -101,9 +98,9 @@ function MainContainer () {
         .catch((err) => console.log('error fetching from database :', err));
       };
 
-    useEffect(() =>{
+    // useEffect(() =>{
 
-    }, [])
+    // }, [])
 
 
 
