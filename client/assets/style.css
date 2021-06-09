@@ -150,9 +150,36 @@ h1, h2 {
     color: rgb(0, 38, 88);
 }
 
+#return-to-board {
+    margin-top: 40px;
+    border: 1px solid rgb(255, 217, 146);
+    color: rgb(255, 217, 146);
+    border-radius: 3px;
+    background-color: transparent;
+    padding: 15px;
+    text-align: center;
+    font-size: small;
+}
+
+#return-to-board:active {
+    background-color:rgb(253, 117, 68);
+    color: rgb(0, 38, 88);
+}
+
+#return-to-board:hover {
+    background-color: rgb(255, 217, 146);
+    color: rgb(0, 38, 88);
+}
+
+.questionAnswer {
+    display: flexbox; 
+}
+
 .question-field {
+    width: 700px;
+    height: 200px; 
     position: fixed; 
-    top: 25%; 
+    top: 20%; 
     left: 25%;
     display:inline-block;
     border: 1px solid rgb(255, 217, 146);
@@ -160,11 +187,18 @@ h1, h2 {
     background-color: transparent;
     margin: auto; 
     padding: 5px;
-    width: 50%;
+    
+}
+
+.question-text {
+    font-size: 26px; 
+    padding: 60px; 
     text-align: center;
 }
 
 .answer-field {
+    width: 700px;
+    height: 260px; 
     position: fixed; 
     top: 50%; 
     left: 25%;
@@ -174,6 +208,51 @@ h1, h2 {
     background-color: transparent;
     margin: auto; 
     padding: 5px;
-    width: 50%;
     text-align: center;
+}
+
+.answer-text{
+    font-size: 22px; 
+    padding: 18px; 
+    margin: auto;
+}
+.answer-text:hover {
+    background-color: rgb(255, 217, 146);
+    /* font-size: 130%; */
+    color: rgb(0, 38, 88);
+}
+
+.right {
+    width: 678px;
+    height: 260px; 
+    position: fixed; 
+    top: 50%; 
+    left: 25%;
+    background-color:rgb(39, 162, 68); 
+    color: rgb(255, 217, 146);
+    font-size: 80px; 
+    padding: 18px; 
+    margin: auto;
+    text-align: center;
+}
+.right2 {
+    font-size: 22px; 
+    padding: 2px;
+}
+
+.wrong {
+    background-color:rgb(253, 117, 68); 
+    color: whitesmoke; 
+    width: 678px;
+    height: 260px; 
+    position: fixed; 
+    top: 50%; 
+    left: 25%;
+    font-size: 80px; 
+    padding: 18px; 
+    margin: auto;
+    text-align: center;
+}
+.wrong2 {
+    font-size: 16px; 
 }

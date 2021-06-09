@@ -1,10 +1,10 @@
 import React from 'react';
-
+import GameBoard from './GameBoard.jsx';
 
 const winner = "Aki";
 const score = "90000000"
 
-function Winner(){
+function Winner({ winner }){
     return(
         <div id="winner-box">
             <div id="winners-circle">
@@ -18,4 +18,4 @@ function Winner(){
 
 
 
-export default WindowEventHandlers;
+export default Winner;

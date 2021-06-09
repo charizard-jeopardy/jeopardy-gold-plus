@@ -2,8 +2,7 @@
     | MainContainer 
         | SignUp
         | Login
-        | GameContainer 
+        | Game Board 
             | Lobby
-            | Game Board 
             | Questions
             | Winner  
