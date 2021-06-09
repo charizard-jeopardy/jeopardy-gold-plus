@@ -4,8 +4,6 @@ import Questions from './Questions.jsx';
 import MainContainer from '../container/MainContainer.jsx';
 
 function GameBoard({ displayName }){
-    console.log(displayName);
-    // const questions = ''; 
     const [view, setView] = useState(''); 
     const [question, setQuestion] = useState(''); 
     const [answer1, setAnswer1] = useState(''); 
@@ -14,44 +12,35 @@ function GameBoard({ displayName }){
     const [answer4, setAnswer4] = useState(''); 
     const [correctAnswer, setCorrectAnswer] = useState(''); 
 
-    const handleClick = (id) => {
-        console.log('handleClick', id)
+    const handleClick = (sid, nid) => {
         setView('q&a');
-        gameFunc(id); 
+        gameFunc(sid, nid); 
     }
 
-    const gameFunc = async (id) => {
-        id.preventDefault();
+    const gameFunc = (sid, nid) => {
+        // id.preventDefault();
         fetch('/startGame')
         .then(response => response.json())
-        .then((data) => {
-            let stringId = ''; 
-            let numId = ''; 
-            for (let i = 0; i < id.length; i++) {
-                typeof id[i] === 'string' ? stringId += id[i] : numId += id[i]; 
-            };
+        .then(data => {
+            console.log('data in gameFunc', data)
             for (const topicObj in data){
-                if (stringId === Object.keys(topicObj)[0]) {
-                    for (const numObj in topicObj){
-                        if (numId === Object.keys(numObj)[0]) {
-                            setQuestion(numObj.question); 
-                            setAnswer1(numObj.answer1); 
-                            setAnswer2(numObj.answer2); 
-                            setAnswer3(numObj.answer3); 
-                            setAnswer4(numObj.answer4); 
-                            setCorrectAnswer(numObj.correctAnswer); 
-                            // renderQuestions(); 
+                if (sid === topicObj) {
+                    for (const numObj in data[topicObj]){
+                        if (nid == numObj) {
+                            setQuestion(data[topicObj][numObj].question); 
+                            setAnswer1(data[topicObj][numObj].answer1); 
+                            setAnswer2(data[topicObj][numObj].answer2); 
+                            setAnswer3(data[topicObj][numObj].answer3); 
+                            setAnswer4(data[topicObj][numObj].answer4); 
+                            setCorrectAnswer(data[topicObj][numObj].correctAnswer); 
+                            setView('q&a');
                 }
             }
         }
         }
       })
-      .catch((err) => console.err('gameBoard.jsx error fetching from database :', err));
+      .catch((err) => console.error('gameBoard.jsx error fetching from database :', err));
     };
-
-    // const renderQuestions = () => {
-
-    // }
 
     let topic = ['frontend', 'backend', 'systemDesign', 'databases', 'javascript', 'gentrivia'];
     let topicArr = [];
@@ -60,17 +49,21 @@ function GameBoard({ displayName }){
     }); 
 
     let boardArr = [];
-    const money = ['200', '400', '600', '800', '1000']; 
+    const money = [200, 400, 600, 800, 1000]; 
     for (let i = 0; i < topic.length; i++) {
         let qArr = [];
+        let stringId = topic[i]; 
         money.forEach(el => {
-           qArr.push(<Square id={topic[i] + el} className="q-square" key={el} value={el}  handleClick={handleClick}></Square>)
+            let numId = el; 
+           qArr.push(<Square stringId={stringId} numId={numId} id={topic[i] + el} className="q-square" key={el} value={el}  handleClick={handleClick}></Square>)
         });
         boardArr.push(<div id={topic[i]} className="column">{qArr}</div>);
     }
-    if (view === 'q&a') return (
-        <div>{questionsArr}</div>
-    ) 
+    if (view === 'q&a') {
+        return (
+            <div><Questions q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} /></div>
+        ) 
+    } 
     else return (
         <div id="game-board">
             <h1>JEOPARDY: GOLD+ EDITION</h1>
@@ -84,13 +77,3 @@ function GameBoard({ displayName }){
 export default GameBoard;
 
 
-
-
-[
-    {
-        questionId: "frontend$200",
-        question: "question here", 
-        answer1: "answer1 here", 
-        correctAnswer: "correct answer here"
-    }
-]

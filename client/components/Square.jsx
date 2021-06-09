@@ -1,12 +1,12 @@
 import React from 'react';
 
 
-function Square({ id, value, handleClick }){
+function Square({ stringId, numId, id, value, handleClick }){
 
 
     return(
         <div>
-            <button className="gametile" id={id} onClick={() => handleClick(id)}>{value}</button>
+            <button className="gametile" id={id} onClick={() => handleClick(stringId, numId)}>{value}</button>
         </div>
     )
 }

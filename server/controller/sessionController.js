@@ -40,11 +40,9 @@ sessionController.verifySession = async (req, res, next) => {
     rowMode: "array"
   }
   const sessionVar = await db.query(verifySessionQuery)
-  console.log(sessionVar);
   if (!sessionVar.rows[0]){
     return res.status(200).json({loggedIn: false});
   } 
-  console.log(sessionVar.rows[0]);
   const userObj = {
     user_id: sessionVar.rows[0][0],
     username: sessionVar.rows[0][1],

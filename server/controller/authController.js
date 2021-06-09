@@ -60,7 +60,6 @@ authController.verifyUser = async (req, res, next) => {
   bcrypt.compare(password, verifyResults.rows[0][0], (err, match) => {
     if (err) console.log("Error in bcrypt compare: ", err);
     if (!match) return res.status(200).json("Incorrect password");
-    console.log(verifyResults.rows[0]);
     const userObj = {
       user_id: verifyResults.rows[0][1],
       username: verifyResults.rows[0][2],
