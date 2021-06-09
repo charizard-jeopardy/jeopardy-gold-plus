@@ -1,8 +1,9 @@
 | App 
     | MainContainer 
+        | SignUp
         | Login
-        | Lobby
         | GameContainer 
+            | Lobby
             | Game Board 
             | Questions
             | Winner  

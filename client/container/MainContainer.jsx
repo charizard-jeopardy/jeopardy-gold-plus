@@ -1,16 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import cookie from 'react-cookie';
 import LogIn from '../components/Login.jsx'
 import SignUp from '../components/SignUp.jsx'
 import Lobby from '../components/Lobby.jsx'
-import GameContainer from './GameContainer.jsx'
+import GameBoard from "../components/GameBoard.jsx";
 
 
 function MainContainer () {
-    const [username, setUsername] = useState(''); 
-    const [password, setPassword] = useState(''); 
     const [viewState, setViewState] = useState('');
+
+    fetch('/checkSession', {
+        method: 'GET',
+        credentials: 'include'
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          console.log('Gotcha');
+          const session = json.loggedIn;
+          if (session===true) setViewState('Game');
+          setDisplayName(json.displayName);
+        }).catch((err) => {
+          console.log(err);
+        });
+    
+    const [username, setUsername] = useState(''); 
+    const [password, setPassword] = useState('');
     const [email, setEmail] = useState(''); 
-    const [nickname, setNickname] = useState('');
+    const [displayName, setDisplayName] = useState('');
 
     const un = (e) => {
         setUsername(e.target.value);
@@ -22,10 +38,13 @@ function MainContainer () {
         setEmail(e.target.value);
     }
     const nn = (e) => {
-        setNickname(e.target.value);
+        setDisplayName(e);
     }
     const signupBtnFunc = async () => {
-        setViewState('signup'); 
+        await setViewState('signup'); 
+    }
+    const renderGame = async () => {
+        await setViewState('Game'); 
     }
 
     const signupFunc = async (e) => {
@@ -34,11 +53,10 @@ function MainContainer () {
           username: username,
           password: password,
           email: email,
-          nickname: nickname,
+          displayName: displayName,
           highScore: 0
           };
-          console.log("signup.jsx body : ", body);
-
+          nn(displayName); 
           fetch('/signup', {
           method: "POST",
           headers: {
@@ -51,7 +69,7 @@ function MainContainer () {
         .then(response => response.json())
         .then(data => {
             console.log('post-signup response from server : ', data); 
-            if (data) setViewState('login');
+            if (data) renderGame();
         })
         .catch((err) => console.err('error fetching from database :', err));
       };
@@ -75,10 +93,19 @@ function MainContainer () {
         .then(response => response.json())
         .then(data => {
             console.log('user logged in :', data);  
-            if (data) setViewState('Game'); 
+            if (data.loggedIn === true) renderGame(); 
+            else {
+                setViewState('signUp');
+            } 
         })
-        .catch((err) => console.err('error fetching from database :', err));
+        .catch((err) => console.log('error fetching from database :', err));
       };
+
+    useEffect(() =>{
+
+    }, [])
+
+
 
     if (viewState === 'signup') return(
         <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc}/> </div>
@@ -87,8 +114,12 @@ function MainContainer () {
         <div> <LogIn un={un} pw={pw} loginFunc={loginFunc} signupBtnFunc={signupBtnFunc}/> </div>
     )
     else if (viewState === 'Game') return (
-        <div><GameContainer /></div>
+        <div>
+            <div><Lobby /></div>
+            <div id="game-container"><GameBoard displayName={displayName}/></div>
+        </div>
     )
 }
+
 
 export default MainContainer;
