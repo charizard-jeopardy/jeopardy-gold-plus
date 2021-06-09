@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDom from 'react-dom';  
 
 // class Questions extends React.Component {
@@ -40,16 +40,24 @@ import ReactDom from 'react-dom';
 // }
 
 
-function Questions({ q, a1, a2, a3, a4, ca, renderAnswer, divClass, response }) {
+function Questions({ q, a1, a2, a3, a4, ca, returnBoard }) {
+  const [response, setResponse] = useState(''); 
+  const [divClass, setDivClass] = useState('answer-text'); 
     const clickAns = (e) => {
         const selectedAns = Object.values(e)[0];
         const selectedId = Object.keys(e)[0]; 
         if( selectedAns === ca ) {
             renderAnswer('right'); 
+            setTimeout(returnBoard, 2000);
         } else {
             renderAnswer('wrong'); 
         } 
     }
+    const renderAnswer = (className) => {
+      setDivClass(className); 
+      setResponse(className); 
+  }
+
     if (response === '') 
     return (
         <div>

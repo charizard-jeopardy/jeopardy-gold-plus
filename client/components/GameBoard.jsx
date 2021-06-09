@@ -13,8 +13,8 @@ function GameBoard({ displayName }){
     const [answer3, setAnswer3] = useState(''); 
     const [answer4, setAnswer4] = useState(''); 
     const [correctAnswer, setCorrectAnswer] = useState('');
-    const [divClass, setDivClass] = useState('answer-text'); 
-    const [response, setResponse] = useState(''); 
+    
+    
     const [disabled, setDisable] = useState(false);
     const [btnclass, setbtnClass] = useState('q-square');
     const [winner, setWinner] = useState('');
@@ -24,10 +24,7 @@ function GameBoard({ displayName }){
     const [previouslyCalledQuestions, setpreviouslyCalledQuestions] = useState([]);
     const [previouslyUsedButton, setpreviouslyUsedButton] = useState([]);
 
-    const renderAnswer = (className) => {
-        setDivClass(className); 
-        setResponse(className); 
-    }
+    
     
     const handleClick = (sid, nid) => {
         // setView('q&a');
@@ -142,7 +139,7 @@ function GameBoard({ displayName }){
         return (
             <div>
                 <div className="questionAnswer">
-                    <Questions response={response} divClass={divClass} renderAnswer={renderAnswer} q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} />
+                    <Questions q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} returnBoar={returnToBoard} />
                 </div>
                 <div>
                     <button id="return-to-board" onClick={returnToBoard}>Return to Board</button>
