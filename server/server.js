@@ -32,8 +32,7 @@ app.get(
   "/checkSession",
   session.verifySession,
   (req, res) => {
-    const { displayName } = res.locals;
-    res.status(200).json({validSession: true, displayName: displayName})
+    res.status(200).json(res.locals.userObj);
   }
 )
 
