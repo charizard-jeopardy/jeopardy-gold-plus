@@ -67,7 +67,10 @@ app.post(
 //** Connecting to Sockets**//
 io.on("connection", socket => {
   console.log('looking at socket')
-  console.log(socket);
+  // console.log(socket);
+  socket.on("hello", (arg) =>{
+    console.log(arg);
+  })
 })
 
 //** Start Game **//
