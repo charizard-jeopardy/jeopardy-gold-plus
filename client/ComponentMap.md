@@ -1,5 +1,6 @@
 | App 
     | MainContainer 
+        | SignUp
         | Login
         | GameContainer 
             | Lobby

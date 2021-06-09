@@ -1,15 +1,12 @@
 import React from 'react';
 
 
-function Square(){
+function Square({ id, value, handleClick }){
 
-    const handleClick = () => {
-        alert("clicked button");
-    }
 
     return(
         <div>
-            <button id="gametile" onClick={handleClick}>$200</button>
+            <button className="gametile" id={id} onClick={() => handleClick(id)}>{value}</button>
         </div>
     )
 }
