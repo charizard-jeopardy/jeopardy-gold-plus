@@ -17,6 +17,7 @@ const app = express();
 
 //** Serve all compiled files when running the production build **//
 app.use(express.static(path.resolve(__dirname, "./../client")));
+app.use('/build', express.static(path.join(__dirname, '../build')));
 app.use(cookieparser());
 // app.use(bodyparser.urlencoded({ extended: true }));
 app.use(express.json());
@@ -31,8 +32,7 @@ app.get(
   "/checkSession",
   session.verifySession,
   (req, res) => {
-    const { displayName } = res.locals;
-    res.status(200).json({validSession: true, displayName: displayName})
+    res.status(200).json(res.locals.userObj);
   }
 )
 
@@ -61,9 +61,13 @@ app.post(
 );
 
 //** Start Game **//
-app.get("/startGame", (req, res) => {
-  res.status(200).json();
-});
+app.get("/startGame",
+  game.getAllCategories,
+  game.getAllQuestions,
+  game.sortAndPickQuestions,
+  (req, res) => {
+    res.status(200).json('filler');
+  });
 
 //** Add questions to database **//
 app.post("/postQuestion", 
