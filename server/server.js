@@ -9,7 +9,6 @@ const model = require("./models/jeopardyModel.js");
 const session = require("./controller/sessionController.js");
 const cookie = require("./controller/cookieController.js");
 
-
 //** Port Set Up **//
 const PORT = 3000;
 
@@ -17,7 +16,6 @@ const PORT = 3000;
 const app = express();
 const httpServer = require("http").createServer(app);
 const io = require("socket.io")(httpServer);
-
 
 //** Serve all compiled files when running the production build **//
 app.use(express.static(path.resolve(__dirname, "./../client")));
@@ -66,12 +64,9 @@ app.post(
 
 //** Connecting to Sockets**//
 io.on("connection", socket => {
-  console.log('looking at socket')
+  console.log('looking at socket');
   // console.log(socket);
-  socket.on("hello", (arg) =>{
-    console.log(arg);
-  })
-})
+});
 
 //** Start Game **//
 app.get("/startGame",
