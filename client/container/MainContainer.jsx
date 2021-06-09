@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import cookie from 'react-cookie';
 import LogIn from '../components/Login.jsx'
 import SignUp from '../components/SignUp.jsx'
-import Lobby from '../components/Lobby.jsx'
 import GameBoard from "../components/GameBoard.jsx";
 import { io } from 'socket.io-client';
+
+let socket;
+if (process.env.NODE_ENV === 'development') socket = io();
+else socket = io('http://54.80.185.106/');
+
+// socket.emit("hello", "world");
 
 let socket;
 if (process.env.NODE_ENV === 'development') socket = io();
@@ -104,12 +109,6 @@ function MainContainer () {
         })
         .catch((err) => console.log('error fetching from database :', err));
       };
-
-    // useEffect(() =>{
-
-    // }, [])
-
-
 
     if (viewState === 'signup') return(
         <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc}/> </div>
