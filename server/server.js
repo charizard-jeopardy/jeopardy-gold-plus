@@ -62,10 +62,38 @@ app.post(
   }
 );
 
-//** Connecting to Sockets**//
+//** Connecting to Sockets and their functionality**//
+
 io.on("connection", socket => {
   console.log('looking at socket');
   // console.log(socket);
+  let playerList = {
+    Player1: null,
+    Player2: null,
+    Player3: null,
+    Player4: null
+  };
+  socket.on("enter", (displayName) =>{
+    if(!playerList.Player1) playerList.Player1 = displayName;
+    else if(!playerList.Player2) playerList.Player2 = displayName;
+    else if(!playerList.Player3) playerList.Player3 = displayName;
+    else if(!playerList.Player4) playerList.Player4 = displayName;
+  });
+
+  //listener for the data from an answered question to all other users
+  socket.on("answer", (answerData)=>{
+    //broadcast to all other clients the data
+    io.broadcast.emit("clientAnswer", answerData);
+  })
+  //listener for the question data to tell other user's questions
+  socket.on("questionPick", (questionInfo) => {
+    io.broadcast.emit("clientQuestionPick", questionInfo);
+  })
+
+  //listener for the game START
+  socket.once("start", (data) =>{
+    io.sockets.emit(playerList);
+  })
 });
 
 //** Start Game **//
