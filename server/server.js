@@ -66,7 +66,8 @@ app.get("/startGame",
   game.getAllQuestions,
   game.sortAndPickQuestions,
   (req, res) => {
-    res.status(200).json('filler');
+    const { gameObject } = res.locals;
+    res.status(200).json(gameObject);
   });
 
 //** Add questions to database **//
