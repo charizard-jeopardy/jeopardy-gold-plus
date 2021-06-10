@@ -9,8 +9,10 @@ function Lobby(props) {
   let Player2 = players[1];
   let Player3 = players[2];
   let Player4 = players[3];
-
-  
+  console.log(Player1);
+  console.log(Player2);
+  console.log(Player3);
+  console.log(Player4)
     return(
         <div id="lobby-bar">
           {!gameStart ? (
@@ -29,10 +31,10 @@ function Lobby(props) {
             </div>
           )}
             <div id="lobby-scores">                
-                <h3 className="lobby-el">{Player1.score}</h3>
-                <h3 className="lobby-el">{Player2.score}</h3>
-                <h3 className="lobby-el">{Player3.score}</h3>
-                <h3 className="lobby-el">{Player4.score}</h3>
+                <h3 className="lobby-el">{Player1.points}</h3>
+                <h3 className="lobby-el">{Player2.points}</h3>
+                <h3 className="lobby-el">{Player3.points}</h3>
+                <h3 className="lobby-el">{Player4.points}</h3>
             </div>
         </div>
     )

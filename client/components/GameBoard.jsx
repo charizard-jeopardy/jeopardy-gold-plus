@@ -19,7 +19,7 @@ function GameBoard({ displayName, socket }){
     const [btnclass, setbtnClass] = useState('q-square');
     const [winner, setWinner] = useState('');
     const [questionsObject, setquestionObject] = useState({})
-    const [score, setScore] = useState('');
+    const [score, setScore] = useState(0);
     const [renderGame, setRenderGame] = useState(false); 
     const [previouslyCalledQuestions, setpreviouslyCalledQuestions] = useState([]);
     const [previouslyUsedButton, setpreviouslyUsedButton] = useState([]);
@@ -31,6 +31,12 @@ function GameBoard({ displayName, socket }){
     ]);
     const [gameStart, setgameStart] = useState(false)
 
+    //to make your own score increase
+    //wheny ou get correc answer (within the correct answer func in question)
+    //check whihc player in playerlist by passing displayName down in props to Question component
+      //add score to player list points
+
+
     // push new username to players array upon update from socket
     const [players, addPlayer] = useState([null, null, null]);
 
@@ -41,19 +47,22 @@ function GameBoard({ displayName, socket }){
     };
     scoreObj[players[0]] = 0;
     scoreObj[players[1]] = 0;
+          
     scoreObj[players[2]] = 0;
 
     const [scores, setScores] = useState(scoreObj);
 
-    const addPoints = (pts) => {
-      scores[username] = scores[username] + pts;
-    }
+    // const adints = (pts) => {
+    //   scoresername] = scores[username] + pts;
+    // }
 
-    //when someone starts the game
-    socket.on("clientStart", (playerList) =>{
+    //when sone starts the game
+    socket.on("clientStart", async ({playerList, questionObj}) =>{      
+      await setgameStart(true);
+      await setPlayerList(playerList);
+      console.log('playerList');
       console.log(playerList);
-      setgameStart(true);
-      setPlayerList(playerList);
+      await setquestionObject(questionObj)
     })
 
     //when someone picks a question
@@ -101,7 +110,7 @@ function GameBoard({ displayName, socket }){
     }
 
     const getPlayers = (e) => {
-      socket.emit("start");
+      socket.emit("start", questionsObject);
       e.target.style.display = "none";
     }
 
@@ -119,7 +128,11 @@ function GameBoard({ displayName, socket }){
       previouslyUsedButton.push(prevQ);
       setpreviouslyUsedButton(previouslyUsedButton);
       for (const topicObj in questionsObject){
+        console.log('sid');
+          console.log(sid);
+          console.log(topicObj)
         if (sid === topicObj) {
+          
           for (const numObj in questionsObject[topicObj]){
               if (nid == numObj) {
                   setValue(nid);
@@ -162,7 +175,7 @@ function GameBoard({ displayName, socket }){
       gameFunc(); 
     }
 
-    let topic = ['frontend', 'backend', 'systemDesign', 'databases', 'javaScript', 'gentrivia'];
+    let topic = ['frontend', 'backend', 'systemDesign', 'databases', 'javascript', 'gentrivia'];
     let topicTitle = ['Frontend', 'Backend', 'System Design', 'Database', 'JavaScript', 'General Trivia']
     let topicArr = [];
     topicTitle.forEach(el => {
@@ -200,7 +213,7 @@ function GameBoard({ displayName, socket }){
         return (
             <div>
                 <div className="questionAnswer">
-                    <Questions q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} returnBoard={returnToBoard} socket={socket} displayName={displayName} value={value} score={score}/>
+                    <Questions setValue={setValue} q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} returnBoard={returnToBoard} socket={socket} displayName={displayName} value={value} score={score} players={playerList} setPlayerList={setPlayerList}/>
                 </div>
                 <div>
                     <button id="return-to-board" onClick={returnToBoard}>Return to Board</button>
@@ -222,7 +235,7 @@ function GameBoard({ displayName, socket }){
                 <div><Lobby players={playerList} scores={scores} gameStart={gameStart}/></div>
                 <h1>JEOPARDY: GOLD+ EDITION</h1>
                 
-                {!gameStart  ? (<button className="topic-square" onClick={getPlayers}>Start Game</button>): (<p>Playing as {displayName}</p>)}
+                {!gameStart  ? (<button className="start-game" onClick={getPlayers}>Start Game</button>): (<p>Playing as {displayName}</p>)}
                 
                 <div className="topics">{topicArr}</div>
                 <div className="q-board">{boardArr}</div>

@@ -71,7 +71,7 @@ io.on("connection", socket => {
   // console.log(socket);
   //generation of the player list, should happen upon entry into game board,
   //as more people enter the game board, more populate lobby
-  socket.on("enter", (displayName) =>{
+  socket.once("enter", (displayName) =>{
     playerList.push({username: displayName, points: 0});
   });
 
@@ -80,7 +80,7 @@ io.on("connection", socket => {
   socket.on("answer", (answerData)=>{
     //broadcast to all other clients the data
     console.log(answerData);
-    socket.broadcast.emit("clientAnswer", answerData);
+    io.emit("clientAnswer", answerData);
   });
   //listener for the question data to tell other user's questions
   //should fire when a question is picked
@@ -91,9 +91,9 @@ io.on("connection", socket => {
 
   //listener for the game START
   //should fire with some sort of four player signup, or initial clicking of a question
-  socket.once("start", (data) =>{
-    io.emit("clientStart", playerList);
-    playerlist = [];
+  socket.on("start", (questionObj) =>{
+    io.emit("clientStart", {playerList: playerList, questionObj: questionObj});
+    playerList = [];
   })
 });
 

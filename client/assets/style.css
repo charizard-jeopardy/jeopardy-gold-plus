@@ -102,7 +102,7 @@ h1, h2 {
     justify-content: space-around;
 }
 
-.topic-square {
+.start-game {
     display:inline-block;
     border: 1px solid rgb(255, 217, 146);
     border-radius: 3px;
@@ -111,7 +111,29 @@ h1, h2 {
     padding: 5px;
     width: 110px;
     text-align: center;
+    color: rgb(255, 217, 146);
+    margin-left: 45%;
 }
+
+.start-game:hover {
+    background: rgb(255, 217, 146);
+    color: rgb(0, 38, 88);
+    cursor: pointer;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.39);
+}
+
+.topic-square {
+    display:inline-block;
+    border: 1px solid rgb(255, 217, 146);
+    border-radius: 3px;
+    background-color: rgb(255, 217, 146);
+    margin: 20px;
+    padding: 5px;
+    width: 110px;
+    text-align: center;
+    color: rgb(0, 38, 88);
+}
+
 
 .q-board {
     display: flex;

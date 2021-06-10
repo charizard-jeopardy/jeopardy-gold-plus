@@ -13,36 +13,15 @@ else socket = io('http://54.80.185.106/');
 
 function MainContainer () {
     const [viewState, setViewState] = useState('');
-
-    fetch('/checkSession', {
-        method: 'GET',
-        credentials: 'include'
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json)
-          const session = json.loggedIn;
-          if (session===true) setViewState('Game');
-          console.log('json object before valid')
-          console.log(json)
-          setUsername(json.username);
-        }).catch((err) => {
-          console.log(err);
-        });
-    
+    const [pageLoading, setpageLoading] = useState(false)
     const [username, setUsername] = useState(''); 
-
-
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     // const [gameName, setGameName] = useState('')
     // const [displayName, setDisplayName] = useState('');
 
-    const un = async (e) => {
-      console.log('in the unseranme func')
-      console.log(e.target.value)
-        await setUsername(e.target.value);
-        console.log('setState un: ' + username)
+    const un = (e) => {
+        setUsername(e.target.value);
     }
     const pw = (e) => {
         setPassword(e.target.value);
@@ -96,8 +75,6 @@ function MainContainer () {
 
     const loginFunc = async (e) => {
           e.preventDefault();
-          console.log('In the login func');
-          console.log('username is' + username);
           const body = {
           username: username,
           password: password
@@ -126,9 +103,7 @@ function MainContainer () {
         <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc} /> </div>
     )
     else if (viewState === '' || viewState === 'login') return (
-      <div >
         <div> <LogIn un={un} pw={pw} loginFunc={loginFunc} signupBtnFunc={signupBtnFunc}/> </div>
-      </div>
     )
     else if (viewState === 'Game') {
       console.log('username before rendering gameboard');
@@ -140,7 +115,27 @@ function MainContainer () {
 
         </div>
     )}
-}
+    if (pageLoading === false) {
+      // useEffect(() =>{
+        fetch('/checkSession', {
+          method: 'GET',
+          credentials: 'include'
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log(json)
+            const session = json.loggedIn;
+            if (session===true) setViewState('Game');
+            console.log('json object before valid')
+            console.log(json)
+            setUsername(json.username);
+            setpageLoading(true)
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
+      // }, [])}
+    }
 
 
 export default MainContainer;
