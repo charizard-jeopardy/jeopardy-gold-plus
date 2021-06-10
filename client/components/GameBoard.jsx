@@ -5,23 +5,31 @@ import MainContainer from '../container/MainContainer.jsx';
 import Winner from './Winner.jsx';
 import Lobby from './Lobby.jsx';
 
-function GameBoard({ displayName }){
-  console.log('displayName')
-  console.log(displayName)
+function GameBoard({ displayName, socket }){
+
     const [view, setView] = useState(''); 
     const [question, setQuestion] = useState(''); 
     const [answer1, setAnswer1] = useState(''); 
     const [answer2, setAnswer2] = useState(''); 
     const [answer3, setAnswer3] = useState(''); 
     const [answer4, setAnswer4] = useState(''); 
+    const [value, setValue] = useState(0);
     const [correctAnswer, setCorrectAnswer] = useState(''); 
     const [disabled, setDisable] = useState(false);
     const [btnclass, setbtnClass] = useState('q-square');
     const [winner, setWinner] = useState('');
     const [questionsObject, setquestionObject] = useState({})
+    const [score, setScore] = useState('');
+    const [questionsObject, setquestionObject] = useState({});
     const [renderGame, setRenderGame] = useState(false); 
     const [previouslyCalledQuestions, setpreviouslyCalledQuestions] = useState([]);
     const [previouslyUsedButton, setpreviouslyUsedButton] = useState([]);
+    const [playerList, setPlayerList] = useState({
+      Player1: null,
+      Player2: null,
+      Player3: null,
+      Player4: null
+    });
 
     // push new username to players array upon update from socket
     const [players, addPlayer] = useState([null, null, null]);
@@ -40,6 +48,17 @@ function GameBoard({ displayName }){
     const addPoints = (pts) => {
       scores[username] = scores[username] + pts;
     }
+
+    socket.on("clientQuestionPick", (ids) =>{
+      console.log()
+      const sid = ids[0];
+      const nid = ids[1];
+      const prevQ = `${sid}${nid}`;
+      console.log('prevQ');
+      console.log(prevQ);
+      getCurrentQuestion(sid, nid, questionsObject, prevQ);
+    });
+
     
     const handleClick = (sid, nid) => {
         // setView('q&a');
@@ -49,12 +68,17 @@ function GameBoard({ displayName }){
         
         if (!previouslyCalledQuestions.includes(prevQ)) getCurrentQuestion(sid, nid, questionsObject, prevQ);         
         setDisable(true);
-        
+        socket.emit("questionPick", [sid, nid]);
     }
 
     const returnToBoard = () => {
         setView('Game')
     }
+
+    socket.on("clientAnswer", (answerObj) => {
+      console.log('we received answerObj')
+      console.log(answerObj);
+    })
 
     //given an sid and a nid thats how we're identifying the question
     //create a state called previouslyCalledQuestions intially equal to an empty object
@@ -78,6 +102,7 @@ function GameBoard({ displayName }){
         if (sid === topicObj) {
           for (const numObj in questionsObject[topicObj]){
               if (nid == numObj) {
+                  setValue(nid);
                   setQuestion(questionsObject[topicObj][numObj].question); 
                   setAnswer1(questionsObject[topicObj][numObj].answer1); 
                   setAnswer2(questionsObject[topicObj][numObj].answer2); 
@@ -117,7 +142,7 @@ function GameBoard({ displayName }){
       gameFunc(); 
     }
 
-    let topic = ['frontend', 'backend', 'systemDesign', 'databases', 'javascript', 'gentrivia'];
+    let topic = ['Frontend', 'Backend', 'System Design', 'Databases', 'JavaScript', 'General Trivia'];
     let topicArr = [];
     topic.forEach(el => {
         topicArr.push(<div className="topic-square" key={el}>{el}</div>)
@@ -153,7 +178,7 @@ function GameBoard({ displayName }){
         return (
             <div>
                 <div className="questionAnswer">
-                    <Questions q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} returnBoard={returnToBoard} />
+                    <Questions q={question} a1={answer1} a2={answer2} a3={answer3} a4={answer4} ca={correctAnswer} returnBoard={returnToBoard} socket={socket} displayName={displayName} value={value} score={score}/>
                 </div>
                 <div>
                     <button id="return-to-board" onClick={returnToBoard}>Return to Board</button>
