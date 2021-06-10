@@ -112,7 +112,7 @@ function MainContainer () {
     )
     else if (viewState === 'Game') return (
         <div>
-            <div id="game-container"><GameBoard displayName={displayName} /></div>
+            <div id="game-container"><GameBoard displayName={displayName} socket={socket}/></div>
         </div>
     )
 }

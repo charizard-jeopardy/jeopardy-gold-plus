@@ -63,7 +63,6 @@ app.post(
 );
 
 //** Connecting to Sockets and their functionality**//
-
 io.on("connection", socket => {
   console.log('looking at socket');
   // console.log(socket);
@@ -87,15 +86,18 @@ io.on("connection", socket => {
   //should fire from the answering of a question correctly
   socket.on("answer", (answerData)=>{
     //broadcast to all other clients the data
-    io.broadcast.emit("clientAnswer", answerData);
-  })
+    console.log(answerData);
+    socket.broadcast.emit("clientAnswer", answerData);
+  });
   //listener for the question data to tell other user's questions
   //should fire when a question is picked
   socket.on("questionPick", (questionInfo) => {
-    io.broadcast.emit("clientQuestionPick", questionInfo);
-  })
+    console.log(questionInfo);
+    socket.broadcast.emit("clientQuestionPick", questionInfo);
+  });
 
   //listener for the game START
+  //should fire with some sort of four player signup, or initial clicking of a question
   socket.once("start", (data) =>{
     io.sockets.emit(playerList);
   })
