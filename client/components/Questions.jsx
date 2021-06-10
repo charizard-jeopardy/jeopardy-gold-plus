@@ -40,19 +40,20 @@ import ReactDom from 'react-dom';
 // }
 
 
-function Questions({ q, a1, a2, a3, a4, ca, returnBoard }) {
+function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, score, value}) {
   const [response, setResponse] = useState(''); 
   const [divClass, setDivClass] = useState('answer-text'); 
     const clickAns = (e) => {
         const selectedAns = Object.values(e)[0];
         const selectedId = Object.keys(e)[0]; 
         if( selectedAns === ca ) {
+            socket.emit("answer", {displayName: displayName, pointTotal: score+value});
             renderAnswer('right'); 
             setTimeout(returnBoard, 2000);
         } else {
             renderAnswer('wrong'); 
         } 
-    }
+    } 
     const renderAnswer = (className) => {
       setDivClass(className); 
       setResponse(className); 

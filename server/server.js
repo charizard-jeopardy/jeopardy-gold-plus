@@ -63,7 +63,6 @@ app.post(
 );
 
 //** Connecting to Sockets and their functionality**//
-
 io.on("connection", socket => {
   console.log('looking at socket');
   // console.log(socket);
@@ -73,24 +72,32 @@ io.on("connection", socket => {
     Player3: null,
     Player4: null
   };
+  //generation of the player list, should happen upon entry into game board,
+  //as more people enter the game board, more populate lobby
   socket.on("enter", (displayName) =>{
     if(!playerList.Player1) playerList.Player1 = displayName;
     else if(!playerList.Player2) playerList.Player2 = displayName;
     else if(!playerList.Player3) playerList.Player3 = displayName;
     else if(!playerList.Player4) playerList.Player4 = displayName;
+    io.sockets.emit(playerList);
   });
 
   //listener for the data from an answered question to all other users
+  //should fire from the answering of a question correctly
   socket.on("answer", (answerData)=>{
     //broadcast to all other clients the data
-    io.broadcast.emit("clientAnswer", answerData);
-  })
+    console.log(answerData);
+    socket.broadcast.emit("clientAnswer", answerData);
+  });
   //listener for the question data to tell other user's questions
+  //should fire when a question is picked
   socket.on("questionPick", (questionInfo) => {
-    io.broadcast.emit("clientQuestionPick", questionInfo);
-  })
+    console.log(questionInfo);
+    socket.broadcast.emit("clientQuestionPick", questionInfo);
+  });
 
   //listener for the game START
+  //should fire with some sort of four player signup, or initial clicking of a question
   socket.once("start", (data) =>{
     io.sockets.emit(playerList);
   })
