@@ -53,12 +53,16 @@ authController.createUser = async (req, res, next) => {
 authController.verifyUser = async (req, res, next) => {
   //expecting req.body to have username and password
   const { username, password } = req.body;
+  console.log('username from verify user');
+  console.log(username)
   const verifyUsernameQuery = {
     text: "SELECT password, user_id, username, displayName FROM users WHERE username = ($1)",
     values: [username],
     rowMode: "array",
   };
   const verifyResults = await db.query(verifyUsernameQuery);
+  console.log('verify results in backend');
+  console.log(verifyResults)
   if (!verifyResults.rows[0])
     return res.status(200).json("Username does not exist");
   bcrypt.compare(password, verifyResults.rows[0][0], (err, match) => {

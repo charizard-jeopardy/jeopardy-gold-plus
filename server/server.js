@@ -64,23 +64,15 @@ app.post(
   }
 );
 
-let playerList = {
-  Player1: null,
-  Player2: null,
-  Player3: null,
-  Player4: null
-};
+let playerList = [];
 //** Connecting to Sockets and their functionality**//
 io.on("connection", socket => {
   console.log('looking at socket');
   // console.log(socket);
   //generation of the player list, should happen upon entry into game board,
   //as more people enter the game board, more populate lobby
-  socket.on("enter", (displayName) =>{
-    if(!playerList.Player1) playerList.Player1 = displayName;
-    else if(!playerList.Player2) playerList.Player2 = displayName;
-    else if(!playerList.Player3) playerList.Player3 = displayName;
-    else if(!playerList.Player4) playerList.Player4 = displayName;
+  socket.once("enter", (displayName) =>{
+    playerList.push({username: displayName, points: 0});
   });
 
   //listener for the data from an answered question to all other users
@@ -88,7 +80,7 @@ io.on("connection", socket => {
   socket.on("answer", (answerData)=>{
     //broadcast to all other clients the data
     console.log(answerData);
-    socket.broadcast.emit("clientAnswer", answerData);
+    io.emit("clientAnswer", answerData);
   });
   //listener for the question data to tell other user's questions
   //should fire when a question is picked
@@ -99,14 +91,9 @@ io.on("connection", socket => {
 
   //listener for the game START
   //should fire with some sort of four player signup, or initial clicking of a question
-  socket.once("start", (data) =>{
-    io.emit("clientStart", playerList);
-    playerlist = {
-      Player1: null,
-      Player2: null,
-      Player3: null,
-      Player4: null
-    };
+  socket.on("start", (questionObj) =>{
+    io.emit("clientStart", {playerList: playerList, questionObj: questionObj});
+    playerList = [];
   })
 });
 

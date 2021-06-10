@@ -13,23 +13,7 @@ else socket = io('http://54.80.185.106/');
 
 function MainContainer () {
     const [viewState, setViewState] = useState('');
-
-    fetch('/checkSession', {
-        method: 'GET',
-        credentials: 'include'
-      })
-        .then((response) => response.json())
-        .then((json) => {
-          console.log(json)
-          const session = json.loggedIn;
-          if (session===true) setViewState('Game');
-          console.log('json object before valid')
-          console.log(json)
-          setUsername(json.username);
-        }).catch((err) => {
-          console.log(err);
-        });
-    
+    const [pageLoading, setpageLoading] = useState(false)
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
@@ -131,7 +115,27 @@ function MainContainer () {
 
         </div>
     )}
-}
+    if (pageLoading === false) {
+      // useEffect(() =>{
+        fetch('/checkSession', {
+          method: 'GET',
+          credentials: 'include'
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            console.log(json)
+            const session = json.loggedIn;
+            if (session===true) setViewState('Game');
+            console.log('json object before valid')
+            console.log(json)
+            setUsername(json.username);
+            setpageLoading(true)
+          }).catch((err) => {
+            console.log(err);
+          });
+        }
+      // }, [])}
+    }
 
 
 export default MainContainer;

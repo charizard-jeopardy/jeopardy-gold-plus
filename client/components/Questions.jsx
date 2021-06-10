@@ -40,24 +40,49 @@ import ReactDom from 'react-dom';
 // }
 
 
-function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, score, value}) {
+function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, score, value, players, setPlayerList, setValue}) {
   const [response, setResponse] = useState(''); 
   const [divClass, setDivClass] = useState('answer-text'); 
     const clickAns = (e) => {
         const selectedAns = Object.values(e)[0];
         const selectedId = Object.keys(e)[0]; 
         if( selectedAns === ca ) {
-            socket.emit("answer", {displayName: displayName, pointTotal: score+value});
+          let currentPoints;
+          players.forEach((el) => {
+            console.log('in the players for each')
+            console.log(el)
+            if (el.username === displayName) currentPoints = el.points + value;
+          })
+            socket.emit("answer", {displayName: displayName, pointTotal: currentPoints});
             renderAnswer('right'); 
             setTimeout(returnBoard, 2000);
+            
+
         } else {
-            renderAnswer('wrong'); 
+            renderAnswer('wrong');
+          let currentPoints;
+          players.forEach((el) => {
+            console.log('in the players for each')
+            console.log(el)
+            if (el.username === displayName) currentPoints = el.points - value;
+          })
+            socket.emit("answer", {displayName: displayName, pointTotal: currentPoints}); 
         } 
     } 
+    //socket listener for "clientAnswer" 
+      //this socket will:
+      //renderAnswer('right'); 
+      //setTimeout(returnBoard, 2000);
+      socket.on("clientAnswer", (answerObj) =>{
+          renderAnswer('right');
+          setTimeout(returnBoard, 2000);
+      })
+
     const renderAnswer = (className) => {
       setDivClass(className); 
       setResponse(className); 
-  }
+      //
+    }
 
     if (response === '') 
     return (
@@ -65,7 +90,7 @@ function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, sc
             <div className="question-field">
                 <div className="question-text">Question : {q}</div>
             </div>
-            <div className="answer-field">
+            <div className="answer-field"> 
                 <div onClick={() => clickAns({a1})} className={divClass}>Answer 1 : {a1}</div>
                 <div onClick={() => clickAns({a2})} className={divClass}>Answer 2 : {a2}</div>
                 <div onClick={() => clickAns({a3})} className={divClass}>Answer 3 : {a3}</div>
