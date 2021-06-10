@@ -99,24 +99,7 @@ function MainContainer () {
         .catch((err) => console.log('error fetching from database :', err));
       };
 
-    if (viewState === 'signup') return(
-        <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc} /> </div>
-    )
-    else if (viewState === '' || viewState === 'login') return (
-        <div> <LogIn un={un} pw={pw} loginFunc={loginFunc} signupBtnFunc={signupBtnFunc}/> </div>
-    )
-    else if (viewState === 'Game') {
-      console.log('username before rendering gameboard');
-      console.log(username)
-      return (
-        <div>
-
-          <div id="game-container"><GameBoard displayName={username} socket={socket}/></div>
-
-        </div>
-    )}
-    if (pageLoading === false) {
-      // useEffect(() =>{
+      if (pageLoading === false) {
         fetch('/checkSession', {
           method: 'GET',
           credentials: 'include'
@@ -134,8 +117,25 @@ function MainContainer () {
             console.log(err);
           });
         }
-      // }, [])}
-    }
+
+    if (viewState === 'signup') return(
+        <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc} /> </div>
+    )
+    else if (viewState === '' || viewState === 'login') return (
+        <div> <LogIn un={un} pw={pw} loginFunc={loginFunc} signupBtnFunc={signupBtnFunc}/> </div>
+    )
+    else if (viewState === 'Game') {
+      console.log('username before rendering gameboard');
+      console.log(username)
+      return (
+        <div>
+
+          <div id="game-container"><GameBoard displayName={username} socket={socket}/></div>
+
+        </div>
+    )}
+  
+  }
 
 
 export default MainContainer;
