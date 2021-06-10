@@ -53,7 +53,7 @@ function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, sc
             console.log(el)
             if (el.username === displayName) currentPoints = el.points + value;
           })
-            socket.emit("answer", {displayName: displayName, pointTotal: currentPoints});
+            socket.emit("answer", {displayName: displayName, pointTotal: currentPoints, answer: 'right'});
             renderAnswer('right'); 
             setTimeout(returnBoard, 2000);
             
@@ -74,8 +74,11 @@ function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, sc
       //renderAnswer('right'); 
       //setTimeout(returnBoard, 2000);
       socket.on("clientAnswer", (answerObj) =>{
-          renderAnswer('right');
-          setTimeout(returnBoard, 2000);
+          const {answer} = answerObj;
+          if (answer === 'right') {
+            renderAnswer('right');
+            setTimeout(returnBoard, 2000);
+          }
       })
 
     const renderAnswer = (className) => {

@@ -99,24 +99,24 @@ function MainContainer () {
         .catch((err) => console.log('error fetching from database :', err));
       };
 
-      if (pageLoading === false) {
-        fetch('/checkSession', {
-          method: 'GET',
-          credentials: 'include'
-        })
-          .then((response) => response.json())
-          .then((json) => {
-            console.log(json)
-            const session = json.loggedIn;
-            if (session===true) setViewState('Game');
-            console.log('json object before valid')
-            console.log(json)
-            setUsername(json.username);
-            setpageLoading(true)
-          }).catch((err) => {
-            console.log(err);
-          });
-        }
+      // if (pageLoading === false) {
+      //   fetch('/checkSession', {
+      //     method: 'GET',
+      //     credentials: 'include'
+      //   })
+      //     .then((response) => response.json())
+      //     .then((json) => {
+      //       console.log(json)
+      //       const session = json.loggedIn;
+      //       if (session===true) setViewState('Game');
+      //       console.log('json object before valid')
+      //       console.log(json)
+      //       setUsername(json.username);
+      //       setpageLoading(true)
+      //     }).catch((err) => {
+      //       console.log(err);
+      //     });
+      //   }
 
     if (viewState === 'signup') return(
         <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc} /> </div>

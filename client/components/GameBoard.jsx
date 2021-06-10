@@ -171,6 +171,8 @@ function GameBoard({ displayName, socket }){
     };
 
     if (renderGame === false) { 
+      console.log('in the renderGame func!!!!!')
+      console.log(displayName)
       socket.emit("enter", displayName);       
       gameFunc(); 
     }
