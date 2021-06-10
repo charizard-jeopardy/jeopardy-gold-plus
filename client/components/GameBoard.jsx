@@ -204,7 +204,7 @@ function GameBoard({ displayName, socket }){
           }
           else {
             let numId = el; 
-            qArr.push(<Square stringId={stringId} numId={numId} id={topic[i] + el} className="q-ClickedButtons" key={el} value={'XX'}  handleClick={handleClick}></Square>)
+            qArr.push(<Square stringId={stringId} numId={numId} id={topic[i] + el} className="q-ClickedButtons" key={el} value={''}  style={{color: "red"}} handleClick={handleClick}></Square>)
             checkId = `${stringId}`
           }
         });

@@ -278,3 +278,9 @@ h1, h2 {
 .wrong2 {
     font-size: 16px; 
 }
+
+.q-ClickedButtons {
+    background: rgb(255, 217, 146);
+    color: rgb(255, 217, 146);
+
+}
