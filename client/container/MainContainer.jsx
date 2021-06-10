@@ -9,7 +9,7 @@ let socket;
 if (process.env.NODE_ENV === 'development') socket = io();
 else socket = io('http://54.80.185.106/');
 
-// socket.emit("hello", "world");
+
 
 function MainContainer () {
     const [viewState, setViewState] = useState('');

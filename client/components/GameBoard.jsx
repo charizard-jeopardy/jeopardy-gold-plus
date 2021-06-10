@@ -20,7 +20,6 @@ function GameBoard({ displayName, socket }){
     const [winner, setWinner] = useState('');
     const [questionsObject, setquestionObject] = useState({})
     const [score, setScore] = useState('');
-    const [questionsObject, setquestionObject] = useState({});
     const [renderGame, setRenderGame] = useState(false); 
     const [previouslyCalledQuestions, setpreviouslyCalledQuestions] = useState([]);
     const [previouslyUsedButton, setpreviouslyUsedButton] = useState([]);
@@ -30,6 +29,7 @@ function GameBoard({ displayName, socket }){
       Player3: null,
       Player4: null
     });
+    const [gameStart, setgameStart] = useState(false)
 
     // push new username to players array upon update from socket
     const [players, addPlayer] = useState([null, null, null]);
@@ -43,12 +43,20 @@ function GameBoard({ displayName, socket }){
     scoreObj[players[1]] = 0;
     scoreObj[players[2]] = 0;
 
-    const [scores, setScore] = useState(scoreObj);
+    const [scores, setScores] = useState(scoreObj);
 
     const addPoints = (pts) => {
       scores[username] = scores[username] + pts;
     }
 
+    //when someone starts the game
+    socket.on("clientStart", (playerList) =>{
+      console.log(playerList);
+      setgameStart(true);
+      setPlayerList(playerList);
+    })
+
+    //when someone picks a question
     socket.on("clientQuestionPick", (ids) =>{
       console.log()
       const sid = ids[0];
@@ -59,26 +67,35 @@ function GameBoard({ displayName, socket }){
       getCurrentQuestion(sid, nid, questionsObject, prevQ);
     });
 
+    //when receiving an answer from some other player
+    socket.on("clientAnswer", (answerObj) => {
+      console.log('we received answerObj')
+      console.log(answerObj);
+    })
     
     const handleClick = (sid, nid) => {
         // setView('q&a');
         // console.log('id: ', id);
         const prevQ = `${sid}${nid}`;
         console.log('precQ: ', prevQ);
+        console.log(questionsObject)
         
-        if (!previouslyCalledQuestions.includes(prevQ)) getCurrentQuestion(sid, nid, questionsObject, prevQ);         
+        if (!previouslyCalledQuestions.includes(prevQ)) {
+          socket.emit("questionPick", [sid, nid]);
+          getCurrentQuestion(sid, nid, questionsObject, prevQ);
+        }         
         setDisable(true);
-        socket.emit("questionPick", [sid, nid]);
+        
     }
 
     const returnToBoard = () => {
         setView('Game')
     }
 
-    socket.on("clientAnswer", (answerObj) => {
-      console.log('we received answerObj')
-      console.log(answerObj);
-    })
+    const getPlayers = (e) => {
+      socket.emit("start");
+      e.target.style.display = "none";
+    }
 
     //given an sid and a nid thats how we're identifying the question
     //create a state called previouslyCalledQuestions intially equal to an empty object
@@ -89,15 +106,10 @@ function GameBoard({ displayName, socket }){
       //checkout if previouslyCalledQuestions contains a key:value pair of the passed in sid and nid
       // if true set disabled to true
     const getCurrentQuestion = (sid, nid, questionsObject, prevQ) => {
-      console.log('in the get currentquestion func')
-      console.log(prevQ)
       previouslyCalledQuestions.push(prevQ)
       setpreviouslyCalledQuestions(previouslyCalledQuestions);
       previouslyUsedButton.push(prevQ);
       setpreviouslyUsedButton(previouslyUsedButton);
-      console.log(previouslyUsedButton)
-      console.log('previouslyCalledQuestions')
-      console.log(previouslyCalledQuestions)
       for (const topicObj in questionsObject){
         if (sid === topicObj) {
           for (const numObj in questionsObject[topicObj]){
@@ -126,7 +138,6 @@ function GameBoard({ displayName, socket }){
     
     const gameFunc = async (sid, nid) => {
       // id.preventDefault();
-      console.log('test!!!!!!!!!!!!!!!');
       await fetch('/startGame')
       .then(response => response.json())
       .then(data => {
@@ -138,13 +149,15 @@ function GameBoard({ displayName, socket }){
       .catch((err) => console.error('gameBoard.jsx error fetching from database :', err));
     };
 
-    if (renderGame === false) {        
+    if (renderGame === false) { 
+      socket.emit("enter", displayName);       
       gameFunc(); 
     }
 
-    let topic = ['Frontend', 'Backend', 'System Design', 'Databases', 'JavaScript', 'General Trivia'];
+    let topic = ['frontend', 'backend', 'systemDesign', 'databases', 'javaScript', 'gentrivia'];
+    let topicTitle = ['Frontend', 'Backend', 'System Design', 'Database', 'JavaScript', 'General Trivia']
     let topicArr = [];
-    topic.forEach(el => {
+    topicTitle.forEach(el => {
         topicArr.push(<div className="topic-square" key={el}>{el}</div>)
     }); 
 
@@ -175,6 +188,7 @@ function GameBoard({ displayName, socket }){
         boardArr.push(<div id={topic[i]} className="column">{qArr}</div>);
     }
     if (view === 'q&a') {
+      console.log('render the question!!!!!!!!!!!!!!!!!!!!!!!')
         return (
             <div>
                 <div className="questionAnswer">
@@ -197,9 +211,11 @@ function GameBoard({ displayName, socket }){
     else {
         return (
             <div id="game-board">
-                <div><Lobby players={players} scores={scores} /></div>
+                <div><Lobby players={playerList} scores={scores} gameStart={gameStart}/></div>
                 <h1>JEOPARDY: GOLD+ EDITION</h1>
-                <p>Playing as {displayName}</p>
+                
+                {!gameStart  ? (<button className="topic-square" onClick={getPlayers}>Start Game</button>): (<p>Playing as {displayName}</p>)}
+                
                 <div className="topics">{topicArr}</div>
                 <div className="q-board">{boardArr}</div>
             </div>
