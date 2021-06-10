@@ -34,6 +34,8 @@ app.get(
   "/checkSession",
   session.verifySession,
   (req, res) => {
+    console.log('in check session')
+    console.log(res.locals.userObj)
     res.status(200).json(res.locals.userObj);
   }
 )

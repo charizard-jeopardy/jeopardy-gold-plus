@@ -6,6 +6,8 @@ import Winner from './Winner.jsx';
 import Lobby from './Lobby.jsx';
 
 function GameBoard({ displayName }){
+  console.log('displayName')
+  console.log(displayName)
     const [view, setView] = useState(''); 
     const [question, setQuestion] = useState(''); 
     const [answer1, setAnswer1] = useState(''); 
@@ -16,13 +18,28 @@ function GameBoard({ displayName }){
     const [disabled, setDisable] = useState(false);
     const [btnclass, setbtnClass] = useState('q-square');
     const [winner, setWinner] = useState('');
-    const [score, setScore] = useState('');
     const [questionsObject, setquestionObject] = useState({})
     const [renderGame, setRenderGame] = useState(false); 
     const [previouslyCalledQuestions, setpreviouslyCalledQuestions] = useState([]);
     const [previouslyUsedButton, setpreviouslyUsedButton] = useState([]);
 
-    
+    // push new username to players array upon update from socket
+    const [players, addPlayer] = useState([null, null, null]);
+
+    // upon new player entry, add key value pair to scores obj
+    // key is player username and value is score, initialized at 0
+    const scoreObj = {
+      username: 0,
+    };
+    scoreObj[players[0]] = 0;
+    scoreObj[players[1]] = 0;
+    scoreObj[players[2]] = 0;
+
+    const [scores, setScore] = useState(scoreObj);
+
+    const addPoints = (pts) => {
+      scores[username] = scores[username] + pts;
+    }
     
     const handleClick = (sid, nid) => {
         // setView('q&a');
@@ -121,7 +138,7 @@ function GameBoard({ displayName }){
             
             // console.log(checkId)
             let numId = el; 
-            qArr.push(<Square stringId={stringId} numId={numId} id={topic[i] + el} className={btnclass} key={el} value={el}  handleClick={handleClick}></Square>)
+            qArr.push(<Square stringId={stringId} numId={numId} id={topic[i] + el} className={btnclass} key={el} value={el} handleClick={handleClick}></Square>)
             checkId = `${stringId}`
           }
           else {
@@ -147,7 +164,7 @@ function GameBoard({ displayName }){
     else if (view === 'winner') {
         return (
             <div>
-                <div><Lobby /></div>
+                <div><Lobby players={players} scores={scores} /></div>
                 <Winner />
             </div>
         )
@@ -155,7 +172,7 @@ function GameBoard({ displayName }){
     else {
         return (
             <div id="game-board">
-                <div><Lobby /></div>
+                <div><Lobby players={players} scores={scores} /></div>
                 <h1>JEOPARDY: GOLD+ EDITION</h1>
                 <p>Playing as {displayName}</p>
                 <div className="topics">{topicArr}</div>

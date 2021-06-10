@@ -13,6 +13,8 @@ authController.createUser = async (req, res, next) => {
     }
   */
   const { username, password, email, displayName } = req.body;
+  console.log('displayName from start of sign up')
+  console.log(displayName)
   const verifyUsernameQuery = {
     text: "SELECT username FROM users WHERE username = ($1)",
     values: [username],
@@ -31,6 +33,8 @@ authController.createUser = async (req, res, next) => {
     rowMode: "array",
   };
   const result = await db.query(createUserQuery);
+  console.log('rendering the query array')
+  console.log(result.rows)
   const userObj = {
     user_id: result.rows[0][0],
     username: result.rows[0][1],
