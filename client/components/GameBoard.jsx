@@ -23,12 +23,12 @@ function GameBoard({ displayName, socket }){
     const [renderGame, setRenderGame] = useState(false); 
     const [previouslyCalledQuestions, setpreviouslyCalledQuestions] = useState([]);
     const [previouslyUsedButton, setpreviouslyUsedButton] = useState([]);
-    const [playerList, setPlayerList] = useState({
-      Player1: null,
-      Player2: null,
-      Player3: null,
-      Player4: null
-    });
+    const [playerList, setPlayerList] = useState([
+      {username: null, points: 0},
+      {username: null, points: 0},
+      {username: null, points: 0},
+      {username: null, points: 0}
+    ]);
     const [gameStart, setgameStart] = useState(false)
 
     // push new username to players array upon update from socket
@@ -71,6 +71,14 @@ function GameBoard({ displayName, socket }){
     socket.on("clientAnswer", (answerObj) => {
       console.log('we received answerObj')
       console.log(answerObj);
+      //answerObj contains: {displayName: username, pointTotal: points}
+      //deconstruct displayName and pointTotal
+      const {displayName, pointTotal} = answerObj;
+      //loop through playerList in state and match playerList.username with the deconstructed displayName
+      playerList.forEach((element) => {
+        if(element.username === displayName) element.points = pointTotal;
+      })
+        //where username and displayName match change playerList.points to the deconstructed pointTotal
     })
     
     const handleClick = (sid, nid) => {

@@ -31,13 +31,18 @@ function MainContainer () {
         });
     
     const [username, setUsername] = useState(''); 
+
+
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     // const [gameName, setGameName] = useState('')
     // const [displayName, setDisplayName] = useState('');
 
-    const un = (e) => {
-        setUsername(e.target.value);
+    const un = async (e) => {
+      console.log('in the unseranme func')
+      console.log(e.target.value)
+        await setUsername(e.target.value);
+        console.log('setState un: ' + username)
     }
     const pw = (e) => {
         setPassword(e.target.value);
@@ -91,6 +96,8 @@ function MainContainer () {
 
     const loginFunc = async (e) => {
           e.preventDefault();
+          console.log('In the login func');
+          console.log('username is' + username);
           const body = {
           username: username,
           password: password
@@ -119,7 +126,9 @@ function MainContainer () {
         <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc} /> </div>
     )
     else if (viewState === '' || viewState === 'login') return (
+      <div >
         <div> <LogIn un={un} pw={pw} loginFunc={loginFunc} signupBtnFunc={signupBtnFunc}/> </div>
+      </div>
     )
     else if (viewState === 'Game') {
       console.log('username before rendering gameboard');

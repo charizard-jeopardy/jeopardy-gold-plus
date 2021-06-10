@@ -5,6 +5,12 @@ function LogIn (props) {
     const  { loginFunc, signupBtnFunc } = props; 
     const { un, pw } = props; 
 
+{/* <form method="POST" action='/api/login'>
+              <input name="username" type="text" placeholder="username"></input>
+              <input name="password" type="password" placeholder="password"></input>
+              <input type='submit' value="Find My Pants!"></input>
+            </form> */}
+
     return (
             <div >
                 <h1>JEOPARDY: GOLD+ EDITION</h1>

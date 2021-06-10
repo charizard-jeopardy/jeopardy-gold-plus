@@ -54,10 +54,16 @@ function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, sc
             renderAnswer('wrong'); 
         } 
     } 
+    //socket listener for "clientAnswer" 
+      //this socket will:
+      //renderAnswer('right'); 
+      //setTimeout(returnBoard, 2000);
+
     const renderAnswer = (className) => {
       setDivClass(className); 
       setResponse(className); 
-  }
+      //
+    }
 
     if (response === '') 
     return (
@@ -65,7 +71,7 @@ function Questions({ q, a1, a2, a3, a4, ca, returnBoard, displayName, socket, sc
             <div className="question-field">
                 <div className="question-text">Question : {q}</div>
             </div>
-            <div className="answer-field">
+            <div className="answer-field"> 
                 <div onClick={() => clickAns({a1})} className={divClass}>Answer 1 : {a1}</div>
                 <div onClick={() => clickAns({a2})} className={divClass}>Answer 2 : {a2}</div>
                 <div onClick={() => clickAns({a3})} className={divClass}>Answer 3 : {a3}</div>
