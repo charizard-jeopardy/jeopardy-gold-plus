@@ -9,7 +9,7 @@ let socket;
 if (process.env.NODE_ENV === 'development') socket = io();
 else socket = io('http://54.80.185.106/');
 
-// socket.emit("hello", "world");
+
 
 function MainContainer () {
     const [viewState, setViewState] = useState('');
@@ -20,17 +20,21 @@ function MainContainer () {
       })
         .then((response) => response.json())
         .then((json) => {
+          console.log(json)
           const session = json.loggedIn;
           if (session===true) setViewState('Game');
-          setDisplayName(json.displayName);
+          console.log('json object before valid')
+          console.log(json)
+          setUsername(json.username);
         }).catch((err) => {
           console.log(err);
         });
     
     const [username, setUsername] = useState(''); 
     const [password, setPassword] = useState('');
-    const [email, setEmail] = useState(''); 
-    const [displayName, setDisplayName] = useState('');
+    const [email, setEmail] = useState('');
+    // const [gameName, setGameName] = useState('')
+    // const [displayName, setDisplayName] = useState('');
 
     const un = (e) => {
         setUsername(e.target.value);
@@ -40,9 +44,14 @@ function MainContainer () {
     }
     const em = (e) => {
         setEmail(e.target.value);
+        console.log('email:')
+        console.log(email)
     }
     const nn = (e) => {
-        setDisplayName(e.target.value);
+      console.log('display name in func nn')
+      // console.log(e)
+      // setGameName(e.target.value);
+        // console.log(gameName);
     }
     const signupBtnFunc = async () => {
         await setViewState('signup'); 
@@ -53,12 +62,14 @@ function MainContainer () {
     }
 
     const signupFunc = async (e) => {
+      console.log('displayName before the post request')
+      // console.log(gameName)
           e.preventDefault();
           const body = {
           username: username,
           password: password,
           email: email,
-          displayName: displayName,
+          displayName: username,
           highScore: 0
           };
           fetch('/signup', {
@@ -98,23 +109,28 @@ function MainContainer () {
             console.log('user logged in :', data);  
             if (data.loggedIn === true) renderGame(); 
             else {
-                setViewState('signUp');
+                setViewState('signup');
             } 
         })
         .catch((err) => console.log('error fetching from database :', err));
       };
 
     if (viewState === 'signup') return(
-        <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc}/> </div>
+        <div> <SignUp un={un} pw={pw} em={em} nn={nn} signupFunc={signupFunc} /> </div>
     )
     else if (viewState === '' || viewState === 'login') return (
         <div> <LogIn un={un} pw={pw} loginFunc={loginFunc} signupBtnFunc={signupBtnFunc}/> </div>
     )
-    else if (viewState === 'Game') return (
+    else if (viewState === 'Game') {
+      console.log('username before rendering gameboard');
+      console.log(username)
+      return (
         <div>
-            <div id="game-container"><GameBoard displayName={displayName} socket={socket}/></div>
+
+          <div id="game-container"><GameBoard displayName={username} socket={socket}/></div>
+
         </div>
-    )
+    )}
 }
 
 

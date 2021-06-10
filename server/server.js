@@ -34,6 +34,8 @@ app.get(
   "/checkSession",
   session.verifySession,
   (req, res) => {
+    console.log('in check session')
+    console.log(res.locals.userObj)
     res.status(200).json(res.locals.userObj);
   }
 )
@@ -62,16 +64,16 @@ app.post(
   }
 );
 
+let playerList = {
+  Player1: null,
+  Player2: null,
+  Player3: null,
+  Player4: null
+};
 //** Connecting to Sockets and their functionality**//
 io.on("connection", socket => {
   console.log('looking at socket');
   // console.log(socket);
-  let playerList = {
-    Player1: null,
-    Player2: null,
-    Player3: null,
-    Player4: null
-  };
   //generation of the player list, should happen upon entry into game board,
   //as more people enter the game board, more populate lobby
   socket.on("enter", (displayName) =>{
@@ -79,7 +81,6 @@ io.on("connection", socket => {
     else if(!playerList.Player2) playerList.Player2 = displayName;
     else if(!playerList.Player3) playerList.Player3 = displayName;
     else if(!playerList.Player4) playerList.Player4 = displayName;
-    io.sockets.emit(playerList);
   });
 
   //listener for the data from an answered question to all other users
@@ -99,7 +100,13 @@ io.on("connection", socket => {
   //listener for the game START
   //should fire with some sort of four player signup, or initial clicking of a question
   socket.once("start", (data) =>{
-    io.sockets.emit(playerList);
+    io.emit("clientStart", playerList);
+    playerlist = {
+      Player1: null,
+      Player2: null,
+      Player3: null,
+      Player4: null
+    };
   })
 });
 
